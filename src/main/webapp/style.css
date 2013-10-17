@@ -1,0 +1,40 @@
+#main {
+    padding: 30px;
+}
+
+#main .head {
+    color: darkmagenta;
+    font: italic 30px/1px fantasy;
+}
+
+#main .outText {
+    color: black;
+    font: 12px/1px sans-serif;
+}
+
+#main .inText {
+    border: aquamarine outset 2px;
+    background: aliceblue;
+}
+
+#main .button {
+    margin-bottom: 10px;
+}
+
+#main .link {
+    color: grey;
+}
+
+#invisible {
+    visibility: hidden;
+}
+
+#main #visible {
+    color: red;
+    visibility: visible;
+}
+
+#main .resultRegistration {
+    color: blue;
+    font: italic 30px/1px fantasy;
+}
