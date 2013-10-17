@@ -37,24 +37,11 @@ public class TicketService {
 
     public String buyTicket() throws IOException {
         log.debug("Start method \"saveTicket\"");
-        if (buyTicBean.getTrain() == null || buyTicBean.getStationFrom() == null || buyTicBean.getStationTo() == null
-                || buyTicBean.getFirstname() == null || buyTicBean.getLastname() == null || buyTicBean.getBirthday() == null) {
+        if ("".equals(buyTicBean.getTrain()) || "".equals(buyTicBean.getStationFrom()) || "".equals(buyTicBean.getStationTo())
+                || buyTicBean.getBirthday() == null || "".equals(buyTicBean.getFirstname()) || "".equals(buyTicBean.getLastname())) {
             log.debug("Send BuyTicketRespondInfo to client with SERVER_ERROR_STATUS");
             message = "Все поля должны быть заполнены!";
             return message;
-        }
-        Passenger passenger = passengerDAO.loadPassenger(buyTicBean.getFirstname(),
-                buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
-        if (passenger == null) {
-            passenger = new Passenger(buyTicBean.getFirstname(),
-                    buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
-            if (!passengerDAO.savePassenger(passenger)) {
-                log.debug("Send BuyTicketRespondInfo to client with SERVER_ERROR_STATUS");
-                message = "Server error";
-                return message;
-            }
-            passenger = passengerDAO.loadPassenger(buyTicBean.getFirstname(),
-                    buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
         }
         Train train = trainDAO.loadTrain(buyTicBean.getTrain());
         if (train == null) {
@@ -75,7 +62,7 @@ public class TicketService {
             return message;
         }
         List allStationsByTrain = trainDAO.getAllStationsByTrain(train);
-        if (!stationInList(stationFrom, allStationsByTrain) || !stationInList(stationTo, allStationsByTrain) || !stationFromBeforeStationToInList(stationFrom, stationTo, allStationsByTrain)) {
+        if (!stationInList(stationFrom, allStationsByTrain) || !stationInList(stationTo, allStationsByTrain)) {
             log.debug("Send BuyTicketRespondInfo to client with WRONG_STATION_TRAIN_STATUS");
             message = "Поезд не проходит через эти станции";
             return message;
@@ -89,6 +76,19 @@ public class TicketService {
             log.debug("Send GetAllRoutesRespondInfo to client with WRONG_DEPARTURE_TIME_STATUS");
             message = "Продажа билетов уже завершена";
             return message;
+        }
+        Passenger passenger = passengerDAO.loadPassenger(buyTicBean.getFirstname(),
+                buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
+        if (passenger == null) {
+            passenger = new Passenger(buyTicBean.getFirstname(),
+                    buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
+            if (!passengerDAO.savePassenger(passenger)) {
+                log.debug("Send BuyTicketRespondInfo to client with SERVER_ERROR_STATUS");
+                message = "Server error";
+                return message;
+            }
+            passenger = passengerDAO.loadPassenger(buyTicBean.getFirstname(),
+                    buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
         }
         synchronized (TrainDAO.class) {
             HashMap<Integer, Integer[]> passengerByStation = trainDAO.countOfPassengerOnEveryStation(train);

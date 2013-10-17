@@ -5,7 +5,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Result admin</title>
@@ -16,7 +17,7 @@
     <div id="main">
         <h:outputText value="Менеджер успешно доваблен" styleClass="resultRegistration"/><br/>
         <a class="link" href="admin_page.xhtml">Добавить нового пользователя</a>
-        <h:commandButton action="authorization" value="Выход"/>
+        <p:commandButton value="Выход" action="#{authService.logout}"/>
     </div>
 </h:body>
 

@@ -12,22 +12,36 @@
 
 <h:head>
     <title>Passenger page</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
 </h:head>
 
 <h:body>
-    <p:tabView>
-        <p:tab title="Поиск поезда">
+    <div id="main">
 
-        </p:tab>
+        <!--<p:layout fullPage="true">-->
+            <!--<p:layoutUnit position="west">-->
+                <h:outputText value="Добро пожаловать, #{currentUser.login}"/>
+            <!--</p:layoutUnit>-->
+            <!--<p:layoutUnit position="east">-->
+                <h:commandButton value="Выход" action="#{authService.logout}"/>
+            <!--</p:layoutUnit>-->
+        <!--</p:layout>-->
+        <br/> <br/>
 
-        <p:tab title="Расписание">
+        <p:tabView>
+            <p:tab title="Поиск поезда">
+                <ui:include src="find_train_page.xhtml"/>
+            </p:tab>
 
-        </p:tab>
+            <p:tab title="Расписание">
+                <ui:include src="schedule_page.xhtml"/>
+            </p:tab>
 
-        <p:tab title="Покупка билета">
-            <ui:include src="buy_ticket_page.xhtml"/>
-        </p:tab>
-    </p:tabView>
+            <p:tab title="Покупка билета">
+                <ui:include src="buy_ticket_page.xhtml"/>
+            </p:tab>
+        </p:tabView>
+    </div>
 </h:body>
 
 </html>

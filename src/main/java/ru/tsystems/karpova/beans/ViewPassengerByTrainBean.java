@@ -7,10 +7,6 @@ public class ViewPassengerByTrainBean {
         this.trainName = trainName;
     }
 
-    public ViewPassengerByTrainBean(String trainName) {
-        this.trainName = trainName;
-    }
-
     public String getTrainName() {
         return trainName;
     }

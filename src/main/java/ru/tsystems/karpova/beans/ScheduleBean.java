@@ -4,11 +4,11 @@ public class ScheduleBean {
 
     private String station;
 
-    public ScheduleBean(String station) {
-        this.station = station;
-    }
-
     public String getStation() {
         return station;
+    }
+
+    public void setStation(String station) {
+        this.station = station;
     }
 }

@@ -22,6 +22,14 @@ public class AuthorizationService {
         userDAO = new UserDAO();
     }
 
+    public String logout() {
+        this.user.setId(-1);
+        this.user.setLogin(null);
+        this.user.setPassword(null);
+        this.user.setAccessLevel(-1);
+        return "authorization.xhtml";
+    }
+
     public String login() {
         log.debug("Start \"login\" method");
         log.info(authBean.getLogin() + " is trying to authorize");

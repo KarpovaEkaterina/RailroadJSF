@@ -25,13 +25,6 @@ public class FindTrainBean {
         this.dateTo = dateTo;
     }
 
-    public FindTrainBean(String stationFrom, String stationTo, Date dateFrom, Date dateTo) {
-        this.stationFrom = stationFrom;
-        this.stationTo = stationTo;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
-    }
-
     public String getStationFrom() {
         return stationFrom;
     }

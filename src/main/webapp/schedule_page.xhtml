@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form>
+        <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+            <h:outputText value="Станция"/>
+            <p:selectOneMenu value="#{scheduleBean.station}" effect="fade" style="width: 200px">
+                <f:selectItem/>
+                <f:selectItems value="#{stationService.allStation}"/>
+            </p:selectOneMenu>
+            <p:commandButton value="Найти" update="table" action="#{trainService.scheduleByStation}"/>
+        </h:panelGrid>
+        <p:dataTable id="table" var="findTrain" value="#{trainService.resultFindTrains}" >
+            <p:column headerText="Название поезда">
+                <h:outputText value="#{findTrain[0]}"/>
+            </p:column>
+            <p:column headerText="Время отправления">
+                <h:outputText value="#{findTrain[1]}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+</ui:composition>

@@ -8,10 +8,6 @@ public class AddStationBean {
         this.stationName = stationName;
     }
 
-    public AddStationBean(String stationName) {
-        this.stationName = stationName;
-    }
-
     public String getStationName() {
         return stationName;
     }

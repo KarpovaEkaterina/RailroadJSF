@@ -11,6 +11,7 @@ import ru.tsystems.karpova.beans.AddTrainBean;
 import ru.tsystems.karpova.beans.FindTrainBean;
 import ru.tsystems.karpova.beans.ScheduleBean;
 import ru.tsystems.karpova.beans.ViewPassengerByTrainBean;
+import ru.tsystems.karpova.entities.User;
 import ru.tsystems.karpova.respond.*;
 
 import java.io.IOException;
@@ -25,6 +26,11 @@ public class TrainService {
     private TrainDAO trainDAO;
     private PassengerDAO passengerDAO;
     private RouteDAO routeDAO;
+    private FindTrainBean findTrBean;
+    private User user;
+    private ViewPassengerByTrainBean viewPassengerBean;
+    private List<Object[]> resultFindTrains = new ArrayList<Object[]>();
+    private ScheduleBean schBean;
 
     public TrainService() {
         trainDAO = new TrainDAO();
@@ -32,9 +38,9 @@ public class TrainService {
         routeDAO = new RouteDAO();
     }
 
-    public ru.tsystems.karpova.respond.ViewPassengerByTrainRespondInfo viewPassengerByTrain(ViewPassengerByTrainBean viewPassengerByTrainRequest) throws IOException {
+    public ru.tsystems.karpova.respond.ViewPassengerByTrainRespondInfo viewPassengerByTrain() throws IOException {
         log.debug("Start method \"viewPassengerByTrain\"");
-        Train train = trainDAO.loadTrain(viewPassengerByTrainRequest.getTrainName());
+        Train train = trainDAO.loadTrain(viewPassengerBean.getTrainName());
         if (train == null) {
             ViewPassengerByTrainRespondInfo respond = new ViewPassengerByTrainRespondInfo(ViewPassengerByTrainRespondInfo.WRONG_TRAIN_NAME_STATUS);
             log.debug("Send ViewPassengerByTrainRespondInfo to client with WRONG_TRAIN_NAME_STATUS");
@@ -83,22 +89,62 @@ public class TrainService {
         }
     }
 
-    public ScheduleRespondInfo scheduleByStation(ScheduleBean scheduleRequest) throws IOException {
+    public List<Object[]> scheduleByStation() throws IOException {
         log.debug("Start method \"scheduleByStation\"");
-        List<Object[]> trains = trainDAO.findTrainByStation(scheduleRequest.getStation());
+        List<Object[]> trains = trainDAO.findTrainByStation(schBean.getStation());
 
-        ScheduleRespondInfo respond = new ScheduleRespondInfo(trains);
         log.debug("Send ScheduleRespondInfo to client");
-        return respond;
+        setResultFindTrains(trains);
+        return trains;
     }
 
-    public FindTrainRespondInfo findTrain(FindTrainBean findRequest) throws IOException {
+    public List<Object[]> findTrain() throws IOException {
         log.debug("Start method \"findTrain\"");
-        List<Object[]> trains = trainDAO.findTrain(findRequest.getStationFrom(),
-                findRequest.getStationTo(), findRequest.getDateFrom(), findRequest.getDateTo());
+        List<Object[]> trains = trainDAO.findTrain(findTrBean.getStationFrom(),
+                findTrBean.getStationTo(), findTrBean.getDateFrom(), findTrBean.getDateTo());
 
-        FindTrainRespondInfo respond = new FindTrainRespondInfo(trains);
         log.debug("Send FindTrainRespondInfo to client");
-        return respond;
+        setResultFindTrains(trains);
+        return trains;
+    }
+
+    public void setFindTrBean(FindTrainBean findTrBean) {
+        this.findTrBean = findTrBean;
+    }
+
+    public FindTrainBean getFindTrBean() {
+        return findTrBean;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setViewPassengerBean(ViewPassengerByTrainBean viewPassengerBean) {
+        this.viewPassengerBean = viewPassengerBean;
+    }
+
+    public ViewPassengerByTrainBean getViewPassengerBean() {
+        return viewPassengerBean;
+    }
+
+    public List<Object[]> getResultFindTrains() {
+        return resultFindTrains;
+    }
+
+    public void setResultFindTrains(List<Object[]> resultFindTrains) {
+        this.resultFindTrains = resultFindTrains;
+    }
+
+    public void setSchBean(ScheduleBean schBean) {
+        this.schBean = schBean;
+    }
+
+    public ScheduleBean getSchBean() {
+        return schBean;
     }
 }

@@ -30,6 +30,30 @@
     </managed-bean>
 
     <managed-bean>
+        <managed-bean-name>addStationBean</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.beans.AddStationBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>findTrainsBean</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.beans.FindTrainBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>viewPassengerByTrainBean</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.beans.ViewPassengerByTrainBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>scheduleBean</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.beans.ScheduleBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
         <managed-bean-name>authService</managed-bean-name>
         <managed-bean-class>ru.tsystems.karpova.service.AuthorizationService</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -82,6 +106,55 @@
             <value>#{currentUser}</value>
         </managed-property>
     </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>stationService</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.service.StationService</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+
+        <managed-property>
+            <property-name>stationBean</property-name>
+            <property-class>ru.tsystems.karpova.beans.AddStationBean</property-class>
+            <value>#{addStationBean}</value>
+        </managed-property>
+
+        <managed-property>
+            <property-name>user</property-name>
+            <property-class>ru.tsystems.karpova.entities.User</property-class>
+            <value>#{currentUser}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>trainService</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.service.TrainService</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+
+        <managed-property>
+            <property-name>findTrBean</property-name>
+            <property-class>ru.tsystems.karpova.beans.FindTrainBean</property-class>
+            <value>#{findTrainsBean}</value>
+        </managed-property>
+
+        <managed-property>
+            <property-name>viewPassengerBean</property-name>
+            <property-class>ru.tsystems.karpova.beans.ViewPassengerByTrainBean</property-class>
+            <value>#{viewPassengerByTrainBean}</value>
+        </managed-property>
+
+        <managed-property>
+            <property-name>schBean</property-name>
+            <property-class>ru.tsystems.karpova.beans.ScheduleBean</property-class>
+            <value>#{scheduleBean}</value>
+        </managed-property>
+
+        <managed-property>
+            <property-name>user</property-name>
+            <property-class>ru.tsystems.karpova.entities.User</property-class>
+            <value>#{currentUser}</value>
+        </managed-property>
+    </managed-bean>
+
     <navigation-rule>
         <from-view-id>/result_admin_page.xhtml</from-view-id>
         <navigation-case>
