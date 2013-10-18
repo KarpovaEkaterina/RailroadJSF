@@ -62,7 +62,7 @@ public class TrainDAO extends BasicDAO {
 
     }
 
-    public List<Object[]> findTrainByStation(String station) {
+    public List<Object[]> findTrainByStationFrom(String station) {
         log.debug("Start findTrainByStation select");
         List results = em.createQuery("select t.name,\n" +
                 "FROM_UNIXTIME(UNIX_TIMESTAMP(t.departure) + SUM(case when wayTime.id = wayA.id then 0 else UNIX_TIMESTAMP(wayTime.time) end)) as startTime\n" +
@@ -71,6 +71,25 @@ public class TrainDAO extends BasicDAO {
                 "join r.schedulesById scheduleA\n" +
                 "join scheduleA.wayByIdWay wayA\n" +
                 "join wayA.stationByIdStation1 stationA\n" +
+                "join r.schedulesById scheduleTime\n" +
+                "join scheduleTime.wayByIdWay wayTime\n" +
+                "where stationA.name = ?\n" +
+                "and scheduleTime.seqNumber <= scheduleA.seqNumber\n" +
+                "group by t.name\n")
+                .setParameter(1, station)
+                .getResultList();
+        return results;
+    }
+
+    public List<Object[]> findTrainByStationTo(String station) {
+        log.debug("Start findTrainByStation select");
+        List results = em.createQuery("select t.name,\n" +
+                "FROM_UNIXTIME(UNIX_TIMESTAMP(t.departure) + SUM(UNIX_TIMESTAMP(wayTime.time))) as startTime\n" +
+                "from Train t \n" +
+                "join t.routeByIdRoute r\n" +
+                "join r.schedulesById scheduleA\n" +
+                "join scheduleA.wayByIdWay wayA\n" +
+                "join wayA.stationByIdStation2 stationA\n" +
                 "join r.schedulesById scheduleTime\n" +
                 "join scheduleTime.wayByIdWay wayTime\n" +
                 "where stationA.name = ?\n" +

@@ -2,16 +2,13 @@ package ru.tsystems.karpova.service;
 
 import org.apache.log4j.Logger;
 import ru.tsystems.karpova.beans.AddRouteBean;
+import ru.tsystems.karpova.entities.*;
 import ru.tsystems.karpova.respond.AddRouteRespondInfo;
 import ru.tsystems.karpova.respond.GetAllRoutesRespondInfo;
 import ru.tsystems.karpova.dao.RouteDAO;
 import ru.tsystems.karpova.dao.ScheduleDAO;
 import ru.tsystems.karpova.dao.StationDAO;
 import ru.tsystems.karpova.dao.WayDAO;
-import ru.tsystems.karpova.entities.Route;
-import ru.tsystems.karpova.entities.Schedule;
-import ru.tsystems.karpova.entities.Station;
-import ru.tsystems.karpova.entities.Way;
 
 import java.io.IOException;
 import java.sql.Timestamp;
@@ -27,6 +24,7 @@ public class RouteService {
     private StationDAO stationDAO;
     private WayDAO wayDAO;
     private ScheduleDAO scheduleDAO;
+    private User user;
 
     public RouteService() {
         routeDAO = new RouteDAO();
@@ -83,15 +81,22 @@ public class RouteService {
         return respond;
     }
 
-    public GetAllRoutesRespondInfo getAllRoutes() throws IOException {
+    public List<String> getAllRoutes() throws IOException {
         log.debug("Start method \"getAllRoutes\"");
         List<Route> allRoutesList = routeDAO.getAllRoutes();
         List<String> allRoutes = new ArrayList<String>();
         for (Route route : allRoutesList) {
             allRoutes.add(route.getName());
         }
-        GetAllRoutesRespondInfo respond = new GetAllRoutesRespondInfo(allRoutes);
         log.debug("Send GetAllRoutesRespondInfo to client");
-        return respond;
+        return allRoutes;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 }

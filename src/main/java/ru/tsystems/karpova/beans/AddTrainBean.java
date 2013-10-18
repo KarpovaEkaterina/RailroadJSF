@@ -25,11 +25,8 @@ public class AddTrainBean {
         this.totalSeats = totalSeats;
     }
 
-    public AddTrainBean(String trainName, String route, int totalSeats, Date departureTime) {
-        this.trainName = trainName;
-        this.route = route;
-        this.totalSeats = totalSeats;
-        this.departureTime = departureTime;
+    public void setTotalSeats(String totalSeats) {
+        this.totalSeats = Integer.parseInt(totalSeats);
     }
 
     public String getTrainName() {

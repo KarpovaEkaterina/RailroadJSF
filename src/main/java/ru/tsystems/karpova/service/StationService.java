@@ -27,6 +27,10 @@ public class StationService {
 
     public String addStation() throws IOException {
         log.debug("Start method \"addStation\"");
+        if (stationBean.getStationName() == null || "".equals(stationBean.getStationName())) {
+            message = "Введите название станции";
+            return message;
+        }
         List<String> allStation = getAllStation();
         if (allStation.contains(stationBean.getStationName())) {
             log.debug("Send AddStationRespondInfo to client with STATION_ALREADY_EXISTS");

@@ -31,6 +31,9 @@ public class TrainService {
     private ViewPassengerByTrainBean viewPassengerBean;
     private List<Object[]> resultFindTrains = new ArrayList<Object[]>();
     private ScheduleBean schBean;
+    private AddTrainBean addTrBean;
+    private String message = "";
+    private boolean typeSchedule = true;
 
     public TrainService() {
         trainDAO = new TrainDAO();
@@ -68,30 +71,40 @@ public class TrainService {
         return respond;
     }
 
-    public AddTrainRespondInfo addTrain(AddTrainBean addTrainRequest) throws IOException {
+    public String addTrain() throws IOException {
         log.debug("Start method \"addTrain\"");
-        Route route = routeDAO.loadRoute(addTrainRequest.getRoute());
-        if (route == null) {
-            AddTrainRespondInfo respond = new AddTrainRespondInfo(AddTrainRespondInfo.WRONG_ROUTE_NAME_STATUS);
-            log.debug("Send AddTrainRespondInfo to client with WRONG_ROUTE_NAME_STATUS");
-            return respond;
+        if ("".equals(addTrBean.getRoute()) || "".equals(addTrBean.getTrainName())
+                || "".equals(addTrBean.getTotalSeats()) || addTrBean.getDepartureTime() == null) {
+            message = "Все поля должны быть заполнены";
+            return message;
         }
-        Train train = new Train(addTrainRequest.getTrainName(), addTrainRequest.getTotalSeats(),
-                new Timestamp(addTrainRequest.getDepartureTime().getTime()), route);
+        Route route = routeDAO.loadRoute(addTrBean.getRoute());
+        if (route == null) {
+            log.debug("Send AddTrainRespondInfo to client with WRONG_ROUTE_NAME_STATUS");
+            message = "Маршрут не найден";
+            return message;
+        }
+        Train train = new Train(addTrBean.getTrainName(), addTrBean.getTotalSeats(),
+                new Timestamp(addTrBean.getDepartureTime().getTime()), route);
         if (!trainDAO.saveTrain(train)) {
-            AddTrainRespondInfo respond = new AddTrainRespondInfo(AddTrainRespondInfo.SERVER_ERROR_STATUS);
             log.debug("Send AddTrainRespondInfo to client with SERVER_ERROR_STATUS");
-            return respond;
+            message = "Server error";
+            return message;
         } else {
-            AddTrainRespondInfo respond = new AddTrainRespondInfo(AddTrainRespondInfo.OK_STATUS);
             log.debug("Send AddTrainRespondInfo to client with OK_STATUS");
-            return respond;
+            message = "Поезд добавлен";
+            return message;
         }
     }
 
     public List<Object[]> scheduleByStation() throws IOException {
         log.debug("Start method \"scheduleByStation\"");
-        List<Object[]> trains = trainDAO.findTrainByStation(schBean.getStation());
+        List<Object[]> trains = new ArrayList<Object[]>();
+        if (typeSchedule) {
+            trains = trainDAO.findTrainByStationFrom(schBean.getStation());
+        } else {
+            trains = trainDAO.findTrainByStationTo(schBean.getStation());
+        }
 
         log.debug("Send ScheduleRespondInfo to client");
         setResultFindTrains(trains);
@@ -146,5 +159,37 @@ public class TrainService {
 
     public ScheduleBean getSchBean() {
         return schBean;
+    }
+
+    public void setAddTrBean(AddTrainBean addTrBean) {
+        this.addTrBean = addTrBean;
+    }
+
+    public AddTrainBean getAddTrBean() {
+        return addTrBean;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<Integer> getTotalSeats() {
+        List<Integer> totalSeats = new ArrayList<Integer>();
+        for (int i = 1; i <= 100; i++) {
+            totalSeats.add(i);
+        }
+        return totalSeats;
+    }
+
+    public boolean isTypeSchedule() {
+        return typeSchedule;
+    }
+
+    public void setTypeSchedule(boolean typeSchedule) {
+        this.typeSchedule = typeSchedule;
     }
 }

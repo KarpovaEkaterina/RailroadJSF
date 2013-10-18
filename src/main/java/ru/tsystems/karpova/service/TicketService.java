@@ -212,12 +212,19 @@ public class TicketService {
     }
 
     public List<String> getListAllStationsByTrain() {
-        listAllStationsByTrain.clear();
-        List<Object[]> allStationsByTrainName = trainDAO.getAllStationsByTrainName(buyTicBean.getTrain());
-        for (Object[] station : allStationsByTrainName) {
-            listAllStationsByTrain.add((String) station[1]);
-        }
         return listAllStationsByTrain;
+    }
+
+    public void updateStationsByTrain() {
+        listAllStationsByTrain.clear();
+        if (buyTicBean.getTrain() != null && !buyTicBean.getTrain().equals("")) {
+            List<Object[]> allStationsByTrainName = trainDAO.getAllStationsByTrainName(buyTicBean.getTrain());
+            for (Object[] station : allStationsByTrainName) {
+                listAllStationsByTrain.add((String) station[1]);
+            }
+        } else {
+            listAllStationsByTrain = new ArrayList<String>();
+        }
     }
 
     public void setListAllStationsByTrain(List<String> listAllStationsByTrain) {

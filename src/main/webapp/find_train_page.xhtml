@@ -12,16 +12,16 @@
             <h:outputText value="Станция прибытия"/>
             <h:outputText value="Время отправления"/>
             <h:outputText value="Время прибытия"/>
-            <p:selectOneMenu value="#{findTrainsBean.stationFrom}" effect="fade">
+            <p:selectOneMenu value="#{findTrainsBean.stationFrom}" effect="fade" style="width: 200px">
                 <f:selectItem/>
                 <f:selectItems value="#{stationService.allStation}"/>
             </p:selectOneMenu>
-            <p:selectOneMenu value="#{findTrainsBean.stationTo}" effect="fade">
+            <p:selectOneMenu value="#{findTrainsBean.stationTo}" effect="fade" style="width: 200px">
                 <f:selectItem/>
                 <f:selectItems value="#{stationService.allStation}"/>
             </p:selectOneMenu>
-            <p:calendar value="#{findTrainsBean.dateFrom}" showButtonPanel="true"/>
-            <p:calendar value="#{findTrainsBean.dateTo}" showButtonPanel="true"/>
+            <p:calendar value="#{findTrainsBean.dateFrom}" showButtonPanel="true" style="width: 200px"/>
+            <p:calendar value="#{findTrainsBean.dateTo}" showButtonPanel="true" style="width: 200px"/>
             <p:commandButton value="Найти" update="table" action="#{trainService.findTrain}"/>
         </h:panelGrid>
         <p:dataTable id="table" var="findTrain" value="#{trainService.resultFindTrains}" >

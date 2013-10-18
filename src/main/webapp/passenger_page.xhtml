@@ -19,25 +19,24 @@
     <div id="main">
 
         <!--<p:layout fullPage="true">-->
-            <!--<p:layoutUnit position="west">-->
-                <h:outputText value="Добро пожаловать, #{currentUser.login}"/>
-            <!--</p:layoutUnit>-->
-            <!--<p:layoutUnit position="east">-->
-                <h:commandButton value="Выход" action="#{authService.logout}"/>
-            <!--</p:layoutUnit>-->
+        <!--<p:layoutUnit position="west">-->
+        <h:outputText value="Добро пожаловать, #{currentUser.login}"/>
+        <!--</p:layoutUnit>-->
+        <!--<p:layoutUnit position="east">-->
+        <h:commandButton value="Выход" action="#{authService.logout}" type="submit"/>
+        <!--</p:layoutUnit>-->
         <!--</p:layout>-->
         <br/> <br/>
-
-        <p:tabView>
-            <p:tab title="Поиск поезда">
+        <p:tabView dynamic="true">
+            <p:tab title="Поиск поезда" id="Tab1">
                 <ui:include src="find_train_page.xhtml"/>
             </p:tab>
 
-            <p:tab title="Расписание">
+            <p:tab title="Расписание" id="Tab2">
                 <ui:include src="schedule_page.xhtml"/>
             </p:tab>
 
-            <p:tab title="Покупка билета">
+            <p:tab title="Покупка билета" id="Tab3">
                 <ui:include src="buy_ticket_page.xhtml"/>
             </p:tab>
         </p:tabView>

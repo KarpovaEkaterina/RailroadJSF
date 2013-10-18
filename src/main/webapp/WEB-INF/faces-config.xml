@@ -36,6 +36,12 @@
     </managed-bean>
 
     <managed-bean>
+        <managed-bean-name>addTrainBean</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.beans.AddTrainBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
         <managed-bean-name>findTrainsBean</managed-bean-name>
         <managed-bean-class>ru.tsystems.karpova.beans.FindTrainBean</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -108,6 +114,18 @@
     </managed-bean>
 
     <managed-bean>
+        <managed-bean-name>routeService</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.service.RouteService</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+
+        <managed-property>
+            <property-name>user</property-name>
+            <property-class>ru.tsystems.karpova.entities.User</property-class>
+            <value>#{currentUser}</value>
+        </managed-property>
+    </managed-bean>
+
+    <managed-bean>
         <managed-bean-name>stationService</managed-bean-name>
         <managed-bean-class>ru.tsystems.karpova.service.StationService</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -140,6 +158,12 @@
             <property-name>viewPassengerBean</property-name>
             <property-class>ru.tsystems.karpova.beans.ViewPassengerByTrainBean</property-class>
             <value>#{viewPassengerByTrainBean}</value>
+        </managed-property>
+
+        <managed-property>
+            <property-name>addTrBean</property-name>
+            <property-class>ru.tsystems.karpova.beans.AddTrainBean</property-class>
+            <value>#{addTrainBean}</value>
         </managed-property>
 
         <managed-property>
