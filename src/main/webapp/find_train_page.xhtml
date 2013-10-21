@@ -24,7 +24,7 @@
             <p:calendar value="#{findTrainsBean.dateTo}" showButtonPanel="true" style="width: 200px"/>
             <p:commandButton value="Найти" update="table" action="#{trainService.findTrain}"/>
         </h:panelGrid>
-        <p:dataTable id="table" var="findTrain" value="#{trainService.resultFindTrains}" >
+        <p:dataTable id="table" var="findTrain" value="#{trainService.scheduleTrainsByStation}" >
             <p:column headerText="Название поезда">
                 <h:outputText value="#{findTrain[0]}"/>
             </p:column>

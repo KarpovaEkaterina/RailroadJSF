@@ -5,6 +5,8 @@ import ru.tsystems.karpova.dao.UserDAO;
 import ru.tsystems.karpova.entities.User;
 import ru.tsystems.karpova.beans.AuthorizationBean;
 
+import javax.faces.context.FacesContext;
+
 public class AuthorizationService {
 
     private static Logger log = Logger.getLogger(AuthorizationService.class);
@@ -23,11 +25,8 @@ public class AuthorizationService {
     }
 
     public String logout() {
-        this.user.setId(-1);
-        this.user.setLogin(null);
-        this.user.setPassword(null);
-        this.user.setAccessLevel(-1);
-        return "authorization.xhtml";
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "authorization.xhtml?faces-redirect=true";
     }
 
     public String login() {
@@ -47,11 +46,11 @@ public class AuthorizationService {
         this.user.setPassword(user.getPassword());
         this.user.setAccessLevel(user.getAccessLevel());
         if (user.getAccessLevel() == ACCESS_LEVEL_ADMIN) {
-            return "admin_page.xhtml";
+            return "admin_page.xhtml?faces-redirect=true";
         } else if (user.getAccessLevel() == ACCESS_LEVEL_MANAGER) {
-            return "manager_page.xhtml";
+            return "manager_page.xhtml?faces-redirect=true";
         }
-        return "passenger_page.xhtml";
+        return "passenger_page.xhtml?faces-redirect=true";
     }
 
     public void setAuthBean(AuthorizationBean authBean) {

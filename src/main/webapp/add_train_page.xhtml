@@ -23,11 +23,11 @@
             <h:outputText value="Дата отправления"/><p:calendar value="#{addTrainBean.departureTime}" pattern="dd.MM.yyyy HH:mm"
                                                                 showButtonPanel="true" style="width: 200px"/>
         </h:panelGrid>
-        <p:commandButton value="Добавить" update="display" action="#{trainService.addTrain}"
-                         onclick="PF('dlg').show();"/>
+        <p:commandButton value="Добавить" update="addTrainResultDisplay" action="#{trainService.addTrain}"
+                         onclick="PF('addTrainResultDialog').show();"/>
 
-        <p:dialog header="Информация" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">
-            <h:panelGrid columns="1" id="display">
+        <p:dialog header="Информация" modal="true" showEffect="fade" hideEffect="fade" widgetVar="addTrainResultDialog">
+            <h:panelGrid columns="1" id="addTrainResultDisplay">
                 <h:outputText value="#{trainService.message}"/>
             </h:panelGrid>
         </p:dialog>

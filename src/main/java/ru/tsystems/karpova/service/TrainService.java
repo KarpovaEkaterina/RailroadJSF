@@ -12,11 +12,11 @@ import ru.tsystems.karpova.beans.FindTrainBean;
 import ru.tsystems.karpova.beans.ScheduleBean;
 import ru.tsystems.karpova.beans.ViewPassengerByTrainBean;
 import ru.tsystems.karpova.entities.User;
-import ru.tsystems.karpova.respond.*;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TrainService {
@@ -29,77 +29,92 @@ public class TrainService {
     private FindTrainBean findTrBean;
     private User user;
     private ViewPassengerByTrainBean viewPassengerBean;
-    private List<Object[]> resultFindTrains = new ArrayList<Object[]>();
+    private List<Object[]> scheduleTrainsByStation = new ArrayList<Object[]>();
+    private List<Object[]> viewAllTrains = new ArrayList<Object[]>();
     private ScheduleBean schBean;
     private AddTrainBean addTrBean;
     private String message = "";
     private boolean typeSchedule = true;
+    private List<Object[]> allPassengerByTrain = new ArrayList<Object[]>();
+
+    public List<Object[]> getAllPassengerByTrain() {
+        return allPassengerByTrain;
+    }
+
+    public void setAllPassengerByTrain(List<Object[]> allPassengerByTrain) {
+        this.allPassengerByTrain = allPassengerByTrain;
+    }
 
     public TrainService() {
         trainDAO = new TrainDAO();
         passengerDAO = new PassengerDAO();
+
         routeDAO = new RouteDAO();
     }
 
-    public ru.tsystems.karpova.respond.ViewPassengerByTrainRespondInfo viewPassengerByTrain() throws IOException {
+    public void viewPassengerByTrain() throws IOException {
         log.debug("Start method \"viewPassengerByTrain\"");
+        allPassengerByTrain.clear();
+
         Train train = trainDAO.loadTrain(viewPassengerBean.getTrainName());
         if (train == null) {
-            ViewPassengerByTrainRespondInfo respond = new ViewPassengerByTrainRespondInfo(ViewPassengerByTrainRespondInfo.WRONG_TRAIN_NAME_STATUS);
             log.debug("Send ViewPassengerByTrainRespondInfo to client with WRONG_TRAIN_NAME_STATUS");
-            return respond;
+            return;
         }
         List<Passenger> allPassengerByTrainList = passengerDAO.getAllPassengerByTrain(train);
-        List<Object[]> allPassengerByTrain = new ArrayList<Object[]>();
         for (Passenger passenger : allPassengerByTrainList) {
             allPassengerByTrain.add(new Object[]{passenger.getFirstname(), passenger.getLastname(), passenger.getBirthday()});
         }
-        ViewPassengerByTrainRespondInfo respond = new ViewPassengerByTrainRespondInfo(allPassengerByTrain);
         log.debug("Send ViewPassengerByTrainRespondInfo to client");
-        return respond;
+        return;
     }
 
-    public GetAllTrainsRespondInfo getAllTrains() throws IOException {
+    public List<Object[]> getAllTrains() throws IOException {
         log.debug("Start method \"getAllTrains\"");
         List<Train> allTrainsList = trainDAO.getAllTrains();
         List<Object[]> allTrains = new ArrayList<Object[]>();
         for (Train train : allTrainsList) {
             allTrains.add(new Object[]{train.getName(), train.getTotalSeats(), train.getDeparture(), train.getRouteByIdRoute().getName()});
         }
-        GetAllTrainsRespondInfo respond = new GetAllTrainsRespondInfo(allTrains);
         log.debug("Send GetAllTrainsRespondInfo to client");
-        return respond;
+        setViewAllTrains(allTrains);
+        return allTrains;
     }
 
-    public String addTrain() throws IOException {
+    public void addTrain() throws IOException {
         log.debug("Start method \"addTrain\"");
         if ("".equals(addTrBean.getRoute()) || "".equals(addTrBean.getTrainName())
                 || "".equals(addTrBean.getTotalSeats()) || addTrBean.getDepartureTime() == null) {
             message = "Все поля должны быть заполнены";
-            return message;
+            return;
         }
         Route route = routeDAO.loadRoute(addTrBean.getRoute());
         if (route == null) {
             log.debug("Send AddTrainRespondInfo to client with WRONG_ROUTE_NAME_STATUS");
             message = "Маршрут не найден";
-            return message;
+            return;
+        }
+        Date currentTime = new Date();
+        if(!currentTime.before(addTrBean.getDepartureTime())){
+            message = "Время отправления уже прошло";
+            return;
         }
         Train train = new Train(addTrBean.getTrainName(), addTrBean.getTotalSeats(),
                 new Timestamp(addTrBean.getDepartureTime().getTime()), route);
         if (!trainDAO.saveTrain(train)) {
             log.debug("Send AddTrainRespondInfo to client with SERVER_ERROR_STATUS");
             message = "Server error";
-            return message;
+            return;
         } else {
             log.debug("Send AddTrainRespondInfo to client with OK_STATUS");
             message = "Поезд добавлен";
-            return message;
+            return;
         }
     }
 
     public List<Object[]> scheduleByStation() throws IOException {
         log.debug("Start method \"scheduleByStation\"");
-        List<Object[]> trains = new ArrayList<Object[]>();
+        List<Object[]> trains;
         if (typeSchedule) {
             trains = trainDAO.findTrainByStationFrom(schBean.getStation());
         } else {
@@ -107,7 +122,7 @@ public class TrainService {
         }
 
         log.debug("Send ScheduleRespondInfo to client");
-        setResultFindTrains(trains);
+        setScheduleTrainsByStation(trains);
         return trains;
     }
 
@@ -117,7 +132,7 @@ public class TrainService {
                 findTrBean.getStationTo(), findTrBean.getDateFrom(), findTrBean.getDateTo());
 
         log.debug("Send FindTrainRespondInfo to client");
-        setResultFindTrains(trains);
+        setScheduleTrainsByStation(trains);
         return trains;
     }
 
@@ -145,12 +160,12 @@ public class TrainService {
         return viewPassengerBean;
     }
 
-    public List<Object[]> getResultFindTrains() {
-        return resultFindTrains;
+    public List<Object[]> getScheduleTrainsByStation() {
+        return scheduleTrainsByStation;
     }
 
-    public void setResultFindTrains(List<Object[]> resultFindTrains) {
-        this.resultFindTrains = resultFindTrains;
+    public void setScheduleTrainsByStation(List<Object[]> scheduleTrainsByStation) {
+        this.scheduleTrainsByStation = scheduleTrainsByStation;
     }
 
     public void setSchBean(ScheduleBean schBean) {
@@ -191,5 +206,13 @@ public class TrainService {
 
     public void setTypeSchedule(boolean typeSchedule) {
         this.typeSchedule = typeSchedule;
+    }
+
+    public List<Object[]> getViewAllTrains() {
+        return viewAllTrains;
+    }
+
+    public void setViewAllTrains(List<Object[]> viewAllTrains) {
+        this.viewAllTrains = viewAllTrains;
     }
 }

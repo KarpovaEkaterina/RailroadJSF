@@ -2,6 +2,14 @@
     padding: 30px;
 }
 
+#main .logout {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    width: inherit;
+    height: inherit;
+}
+
 #main .head {
     color: darkmagenta;
     font: italic 30px/1px fantasy;

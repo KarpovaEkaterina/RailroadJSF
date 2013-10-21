@@ -16,11 +16,11 @@
             </p:selectOneMenu>
             <p:commandButton value="Найти" update="table" action="#{trainService.scheduleByStation}"/>
         </h:panelGrid>
-        <p:dataTable id="table" var="findTrain" value="#{trainService.resultFindTrains}" >
+        <p:dataTable id="table" var="findTrain" value="#{trainService.scheduleTrainsByStation}" >
             <p:column headerText="Название поезда">
                 <h:outputText value="#{findTrain[0]}"/>
             </p:column>
-            <p:column headerText="Время отправления">
+            <p:column headerText="Время">
                 <h:outputText value="#{findTrain[1]}"/>
             </p:column>
         </p:dataTable>

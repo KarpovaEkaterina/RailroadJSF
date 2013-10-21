@@ -1,18 +1,15 @@
 package ru.tsystems.karpova.beans;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class AddRouteBean {
 
     private String routeName;
-    private List<String> stationsForNewRoute;
+    private List<String> stationsForNewRoute = new ArrayList<String>();
     private Map<String, Object[]> newWay;
-    private String delimiter;
-
-    public void setDelimiter(String delimiter) {
-        this.delimiter = delimiter;
-    }
+    private String newStation;
 
     public void setRouteName(String routeName) {
         this.routeName = routeName;
@@ -24,10 +21,6 @@ public class AddRouteBean {
 
     public void setNewWay(Map<String, Object[]> newWay) {
         this.newWay = newWay;
-    }
-
-    public String getDelimiter() {
-        return delimiter;
     }
 
     public String getRouteName() {
@@ -42,4 +35,11 @@ public class AddRouteBean {
         return newWay;
     }
 
+    public String getNewStation() {
+        return newStation;
+    }
+
+    public void setNewStation(String newStation) {
+        this.newStation = newStation;
+    }
 }

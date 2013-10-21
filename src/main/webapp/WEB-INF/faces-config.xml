@@ -60,6 +60,18 @@
     </managed-bean>
 
     <managed-bean>
+        <managed-bean-name>addRouteBean</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.beans.AddRouteBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
+        <managed-bean-name>addWayBean</managed-bean-name>
+        <managed-bean-class>ru.tsystems.karpova.beans.AddWayBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+
+    <managed-bean>
         <managed-bean-name>authService</managed-bean-name>
         <managed-bean-class>ru.tsystems.karpova.service.AuthorizationService</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
@@ -117,6 +129,18 @@
         <managed-bean-name>routeService</managed-bean-name>
         <managed-bean-class>ru.tsystems.karpova.service.RouteService</managed-bean-class>
         <managed-bean-scope>session</managed-bean-scope>
+
+        <managed-property>
+            <property-name>addNewRouteBean</property-name>
+            <property-class>ru.tsystems.karpova.beans.AddRouteBean</property-class>
+            <value>#{addRouteBean}</value>
+        </managed-property>
+
+        <managed-property>
+            <property-name>addNewWayBean</property-name>
+            <property-class>ru.tsystems.karpova.beans.AddWayBean</property-class>
+            <value>#{addWayBean}</value>
+        </managed-property>
 
         <managed-property>
             <property-name>user</property-name>

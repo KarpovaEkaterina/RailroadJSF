@@ -17,27 +17,22 @@
 
 <h:body>
     <div id="main">
-
-        <!--<p:layout fullPage="true">-->
-        <!--<p:layoutUnit position="west">-->
-        <h:outputText value="Добро пожаловать, #{currentUser.login}"/>
-        <!--</p:layoutUnit>-->
-        <!--<p:layoutUnit position="east">-->
-        <h:commandButton value="Выход" action="#{authService.logout}" type="submit"/>
-        <!--</p:layoutUnit>-->
-        <!--</p:layout>-->
+        <h:form>
+            <h:outputText value="Добро пожаловать, #{currentUser.login}" styleClass="ui-widget"/>
+            <p:commandButton value="Выход" action="#{authService.logout}" styleClass="logout"/>
+        </h:form>
         <br/> <br/>
 
         <p:tabView>
-            <p:tab title="Добавление станции">
+            <p:tab title="Новая станция">
                 <ui:include src="add_station_page.xhtml"/>
             </p:tab>
 
-            <p:tab title="Добавление поезда">
+            <p:tab title="Новый поезд">
                 <ui:include src="add_train_page.xhtml"/>
             </p:tab>
 
-            <p:tab title="Добавление маршрута">
+            <p:tab title="Новый маршрут">
                 <ui:include src="add_route_page.xhtml"/>
             </p:tab>
 

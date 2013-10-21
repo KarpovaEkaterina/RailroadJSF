@@ -25,27 +25,27 @@ public class StationService {
         this.stationDAO = new StationDAO();
     }
 
-    public String addStation() throws IOException {
+    public void addStation() throws IOException {
         log.debug("Start method \"addStation\"");
         if (stationBean.getStationName() == null || "".equals(stationBean.getStationName())) {
             message = "Введите название станции";
-            return message;
+            return;
         }
         List<String> allStation = getAllStation();
         if (allStation.contains(stationBean.getStationName())) {
             log.debug("Send AddStationRespondInfo to client with STATION_ALREADY_EXISTS");
             message = "Станция с таким названием уже существует";
-            return message;
+            return;
         }
         Station station = new Station(stationBean.getStationName());
         if (!stationDAO.saveStation(station)) {
             log.debug("Send AddStationRespondInfo to client with SERVER_ERROR_STATUS");
             message = "Server error status";
-            return message;
+            return;
         } else {
             log.debug("Send AddStationRespondInfo to client with OK_STATUS");
             message = "Станция успешно добавлена";
-            return message;
+            return;
         }
     }
 
