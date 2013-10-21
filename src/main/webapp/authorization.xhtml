@@ -4,7 +4,8 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
     <title>Authorization page</title>
@@ -16,22 +17,24 @@
         <h:outputText value="Вход" styleClass="head"/>
         <br/><br/>
         <h:form>
-            <h:outputText value="Имя пользователя" styleClass="outText"/>
-            <br/>
+            <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                <h:outputText value="Имя пользователя" styleClass="ui-widget"/>
+                <h:inputText value="#{authorizationBean.login}" size="20"/>
+                <h:outputText value="Пароль" styleClass="ui-widget"/>
+                <h:inputSecret value="#{authorizationBean.password}" size="20"/>
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:commandButton action="#{authService.login}" value="Вход"
+                                     update=":#{p:component('errorMessage')}"/>
+                    <a class="link" href="registration.xhtml">Регистрация</a>
+                </h:panelGrid>
+            </h:panelGrid>
 
-            <h:inputText value="#{authorizationBean.login}" size="20" styleClass="inText"/>
-            <br/>
-
-            <h:outputText value="Пароль" styleClass="outText"/>
-            <br/>
-
-            <h:inputSecret value="#{authorizationBean.password}" size="20" styleClass="inText"/>
-            <br/>
-
-            <h:commandButton action="#{authService.login}" value="Вход" styleClass="button" type="submit"/>
-            <a class="link" href="registration.xhtml">Регистрация</a>
+            <p:outputPanel id="errorMessage" style="display:block;margin-top:10px;">
+                <h:outputText value="#{authService.errorMessage}"
+                              rendered="#{not empty authService.errorMessage}"
+                              styleClass="ui-widget"/>
+            </p:outputPanel>
         </h:form>
-        <div class="#{authService.errorVisibility}" style="color: red;"><h:outputText value="#{authService.errorMessage}"/></div>
     </div>
 
 </h:body>

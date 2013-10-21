@@ -33,15 +33,6 @@
     color: grey;
 }
 
-#invisible {
-    visibility: hidden;
-}
-
-#main #visible {
-    color: red;
-    visibility: visible;
-}
-
 #main .resultRegistration {
     color: blue;
     font: italic 30px/1px fantasy;

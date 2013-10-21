@@ -50,12 +50,12 @@ public class RegistrationService {
             log.info("Registration passed");
             log.debug("Send RegistrationRespondInfo to client with OK_STATUS");
             if (this.user.getAccessLevel() == ACCESS_LEVEL_ADMIN) {
-                return "result_admin_page.xhtml";
+                return "result_admin_page.xhtml?faces-redirect=true";
             } else {
                 this.user.setLogin(user.getLogin());
                 this.user.setPassword(user.getPassword());
                 this.user.setAccessLevel(user.getAccessLevel());
-                return "passenger_page.xhtml";
+                return "passenger_page.xhtml?faces-redirect=true";
             }
         } else {
             log.debug("Send RegistrationRespondInfo to client with SERVER_ERROR_STATUS");

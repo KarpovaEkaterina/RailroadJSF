@@ -7,7 +7,8 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <h:form>
-        <p:commandButton value="Обновить" update="allTrainsTable" action="#{trainService.allTrains}"/>
+        <p:commandButton value="Обновить" update="allTrainsTable" action="#{trainService.viewAllTrains}"/>
+        <br/> <br/>
         <p:dataTable id="allTrainsTable" var="train" value="#{trainService.viewAllTrains}">
             <p:column headerText="Название поезда">
                 <h:outputText value="#{train[0]}"/>
@@ -18,7 +19,7 @@
             <p:column headerText="Время отправления">
                 <h:outputText value="#{train[2]}"/>
             </p:column>
-            <p:column headerText="Номер маршрута">
+            <p:column headerText="Название маршрута">
                 <h:outputText value="#{train[3]}"/>
             </p:column>
         </p:dataTable>

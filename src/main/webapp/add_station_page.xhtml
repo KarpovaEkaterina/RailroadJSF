@@ -3,7 +3,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <h:form>
@@ -11,9 +10,13 @@
             <h:outputText value="Название новой станции"/>
             <h:inputText value="#{addStationBean.stationName}" style="width: 200px"/>
         </h:panelGrid>
-        <p:commandButton action="#{stationService.addStation}" update="addStationResultDisplay" value="Добавить" oncomplete="PF('addStationResultDialog').show();" type="submit" />
+        <p:commandButton action="#{stationService.addStation}"
+                         update="addStationResultDisplay, :#{p:component('listAllStations')}"
+                         value="Добавить"
+                         oncomplete="PF('addStationResultDialog').show();" type="submit"/>
 
-        <p:dialog header="Информация" modal="true" showEffect="fade" hideEffect="fade" widgetVar="addStationResultDialog">
+        <p:dialog header="Информация" modal="true" showEffect="fade" hideEffect="fade"
+                  widgetVar="addStationResultDialog">
             <h:panelGrid id="addStationResultDisplay" columns="1">
                 <h:outputText value="#{stationService.message}"/>
             </h:panelGrid>

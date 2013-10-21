@@ -69,8 +69,8 @@ public class TrainService {
         return;
     }
 
-    public List<Object[]> getAllTrains() throws IOException {
-        log.debug("Start method \"getAllTrains\"");
+    public void viewAllTrains() throws IOException {
+        log.debug("Start method \"viewAllTrains\"");
         List<Train> allTrainsList = trainDAO.getAllTrains();
         List<Object[]> allTrains = new ArrayList<Object[]>();
         for (Train train : allTrainsList) {
@@ -78,7 +78,7 @@ public class TrainService {
         }
         log.debug("Send GetAllTrainsRespondInfo to client");
         setViewAllTrains(allTrains);
-        return allTrains;
+        return;
     }
 
     public void addTrain() throws IOException {
@@ -112,7 +112,7 @@ public class TrainService {
         }
     }
 
-    public List<Object[]> scheduleByStation() throws IOException {
+    public void scheduleByStation() throws IOException {
         log.debug("Start method \"scheduleByStation\"");
         List<Object[]> trains;
         if (typeSchedule) {
@@ -123,17 +123,17 @@ public class TrainService {
 
         log.debug("Send ScheduleRespondInfo to client");
         setScheduleTrainsByStation(trains);
-        return trains;
+        return;
     }
 
-    public List<Object[]> findTrain() throws IOException {
+    public void findTrain() throws IOException {
         log.debug("Start method \"findTrain\"");
         List<Object[]> trains = trainDAO.findTrain(findTrBean.getStationFrom(),
                 findTrBean.getStationTo(), findTrBean.getDateFrom(), findTrBean.getDateTo());
 
         log.debug("Send FindTrainRespondInfo to client");
         setScheduleTrainsByStation(trains);
-        return trains;
+        return;
     }
 
     public void setFindTrBean(FindTrainBean findTrBean) {

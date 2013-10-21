@@ -33,7 +33,7 @@
                         <p:selectOneMenu id="station" value="#{addRouteBean.newStation}" effect="fade"
                                          style="width: 200px">
                             <f:selectItem/>
-                            <f:selectItems value="#{stationService.allStation}"/>
+                            <f:selectItems id="listAllStations" value="#{stationService.allStation}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
 
