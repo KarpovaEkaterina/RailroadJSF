@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:form>
+        <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5">
+            <h:outputText value="Станция отправления"/>
+            <h:outputText value="Станция прибытия"/>
+            <h:outputText value="Время отправления"/>
+            <h:outputText value="Время прибытия"/>
+            <p:selectOneMenu value="#{findTrainBean.stationFrom}" effect="fade" style="width: 200px">
+                <f:selectItem/>
+                <f:selectItems value="#{getAllStationsBean.allStation}"/>
+            </p:selectOneMenu>
+            <p:selectOneMenu value="#{findTrainBean.stationTo}" effect="fade" style="width: 200px">
+                <f:selectItem/>
+                <f:selectItems value="#{getAllStationsBean.allStation}"/>
+            </p:selectOneMenu>
+            <p:calendar value="#{findTrainBean.dateFrom}" showButtonPanel="true" style="width: 200px"/>
+            <p:calendar value="#{findTrainBean.dateTo}" showButtonPanel="true" style="width: 200px"/>
+            <p:commandButton value="Найти" update="table" action="#{findTrainBean.findTrain}"/>
+        </h:panelGrid>
+        <p:dataTable id="table" var="findTrain" value="#{findTrainBean.scheduleTrainsByStation}" >
+            <p:column headerText="Название поезда">
+                <h:outputText value="#{findTrain[0]}"/>
+            </p:column>
+            <p:column headerText="Время отправления">
+                <h:outputText value="#{findTrain[1]}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+</ui:composition>

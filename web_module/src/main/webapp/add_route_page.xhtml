@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:panelGrid id="addRoutePanel" columns="2" style="margin-bottom:10px" cellpadding="5">
+        <h:form id="addRouteForm">
+            <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                <h:outputText value="Название маршрута"/>
+                <h:inputText value="#{addRouteBean.routeName}" style="width: 200px"/>
+            </h:panelGrid>
+
+            <p:commandButton value="Добавить станцию" onclick="PF('addStationToRouteDialog').show()"/>
+
+            <p:commandButton action="#{addRouteBean.addRoute}" update="addRouteResultDisplay" value="Добавить маршрут"
+                             onclick="PF('addRouteResultDialog').show()"/>
+
+            <p:dialog header="Информация" modal="true" showEffect="fade" hideEffect="fade"
+                      widgetVar="addRouteResultDialog">
+                <h:panelGrid id="addRouteResultDisplay" columns="1">
+                    <h:outputText value="#{addRouteBean.message}"/>
+                </h:panelGrid>
+            </p:dialog>
+
+            <p:dialog header="Добавить станцию" widgetVar="addStationToRouteDialog" modal="true" resizable="false">
+                <p:outputPanel id="addStationToRouteDisplay">
+
+                    <h:panelGrid columns="2" style="margin-bottom:10px">
+                        <h:outputLabel for="station" value="Station:"/>
+                        <p:selectOneMenu id="station" value="#{addRouteBean.newStation}" effect="fade"
+                                         style="width: 200px">
+                            <f:selectItem/>
+                            <f:selectItems id="listAllStations" value="#{getAllStationsBean.allStation}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <p:commandButton id="submitButton" value="Добавить" action="#{addRouteBean.addNewStationByList}"
+                                     update=":#{p:component('addStationToRouteResult')}, :#{p:component('stationsTable')}"
+                                     oncomplete="PF('addStationToRouteDialog').hide();"/>
+
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:outputPanel id="addStationToRouteResult" style="display:block;margin-top:10px;">
+                <h:outputText value="#{addRouteBean.showDialog}" style="color: red"/>
+                <h:panelGrid columns="1" rendered="#{addRouteBean.addWaysForm}">
+                    <h:outputText value="Путь не найден"/>
+                    <h:outputText value="Цена"/>
+                    <h:inputText value="#{addWayBean.price}"/>
+                    <h:outputText value="Время в пути"/>
+                    <p:calendar value="#{addWayBean.time}" pattern="HH:mm" timeOnly="true"/>
+                </h:panelGrid>
+                <p:commandButton value="Добавить" action="#{addWayBean.addWay}"
+                                 update="addWaysResultDisplay, :#{p:component('stationsTable')}"
+                                 rendered="#{addRouteBean.addWaysForm}"/>
+
+                <p:outputPanel id="addWaysResultDisplay" style="display:block;margin-top:10px;">
+                    <h:outputText value="#{addWayBean.addWaysResult}"
+                                  rendered="#{not empty addWayBean.addWaysResult}"/>
+                </p:outputPanel>
+            </p:outputPanel>
+
+
+        </h:form>
+        <p:dataTable id="stationsTable" var="station" value="#{addRouteBean.stationsForNewRoute}"
+                style="position:absolute; top: 90px; padding-left: inherit;">
+            <p:column headerText="Станции в маршруте">
+                <h:outputText value="#{station}"/>
+            </p:column>
+        </p:dataTable>
+    </h:panelGrid>
+</ui:composition>

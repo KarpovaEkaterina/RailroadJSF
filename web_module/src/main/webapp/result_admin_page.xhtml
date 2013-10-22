@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+    <title>Result admin</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+
+<h:body>
+    <div id="main">
+        <h:form>
+            <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
+                <h:outputText value="Менеджер успешно доваблен" styleClass="ui-widget"/>
+                <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+                    <p:commandButton action="admin_page.xhtml?faces-redirect=true" value="Добавить нового пользователя"/>
+                    <p:commandButton action="#{authorizationBean.logout}" value="Выход"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </div>
+</h:body>
+
+</html>

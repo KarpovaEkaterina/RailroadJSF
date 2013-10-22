@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title>Manager page</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</h:head>
+
+<h:body>
+    <div id="main">
+        <h:form>
+            <h:outputText value="Добро пожаловать, #{currentUserBean.login}" styleClass="ui-widget"/>
+            <p:commandButton value="Выход" action="#{authorizationBean.logout}" styleClass="logout"/>
+        </h:form>
+        <br/> <br/>
+
+        <p:tabView>
+            <p:tab title="Новая станция">
+                <ui:include src="add_station_page.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Новый поезд">
+                <ui:include src="add_train_page.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Новый маршрут">
+                <ui:include src="add_route_page.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Просмотр пассажиров">
+                <ui:include src="view_passenger_page.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Просмотр поездов">
+                <ui:include src="view_train_page.xhtml"/>
+            </p:tab>
+
+            <p:tab title="Продажа билета">
+                <ui:include src="buy_ticket_page.xhtml"/>
+            </p:tab>
+        </p:tabView>
+    </div>
+</h:body>
+
+</html>
