@@ -3,8 +3,6 @@ package ru.tsystems.karpova.service;
 import org.apache.log4j.Logger;
 import ru.tsystems.karpova.beans.AddStationBean;
 import ru.tsystems.karpova.entities.User;
-import ru.tsystems.karpova.respond.AddStationRespondInfo;
-import ru.tsystems.karpova.respond.GetAllStationRespondInfo;
 import ru.tsystems.karpova.dao.StationDAO;
 import ru.tsystems.karpova.entities.Station;
 
@@ -23,6 +21,14 @@ public class StationService {
 
     public StationService() {
         this.stationDAO = new StationDAO();
+    }
+
+    public String updatePage() {
+        stationBean.setStationName("");
+        if ("Станция успешно добавлена".equals(message)) {
+            return "manager_page.xhtml?faces-redirect=true";
+        }
+        return "";
     }
 
     public void addStation() throws IOException {

@@ -4,8 +4,6 @@ import org.apache.log4j.Logger;
 import ru.tsystems.karpova.beans.AddRouteBean;
 import ru.tsystems.karpova.beans.AddWayBean;
 import ru.tsystems.karpova.entities.*;
-import ru.tsystems.karpova.respond.AddRouteRespondInfo;
-import ru.tsystems.karpova.respond.GetAllRoutesRespondInfo;
 import ru.tsystems.karpova.dao.RouteDAO;
 import ru.tsystems.karpova.dao.ScheduleDAO;
 import ru.tsystems.karpova.dao.StationDAO;

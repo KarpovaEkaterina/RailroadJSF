@@ -40,6 +40,7 @@
     <orderEntry type="library" name="jsf-2.2.1" level="project" />
     <orderEntry type="library" name="Java EE 6-Java EE 6" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:3.8.1" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.12" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:5.1.26" level="project" />
     <orderEntry type="library" name="Maven: org.hibernate:hibernate-core:4.2.5.Final" level="project" />
