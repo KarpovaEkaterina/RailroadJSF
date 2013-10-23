@@ -134,6 +134,7 @@ public class AddRouteBean implements Serializable {
             addWayBean.setAddWaysResult("Поля некорректно заполнены");
             return;
         }
+        addWaysForm = false;
         stationsForNewRoute.add(newStation);
         addWayBean.setStationA(stationsForNewRoute.get(stationsForNewRoute.size() - 2));
         addWayBean.setStationB(stationsForNewRoute.get(stationsForNewRoute.size() - 1));
