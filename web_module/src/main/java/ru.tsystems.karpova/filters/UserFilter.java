@@ -1,6 +1,7 @@
 package ru.tsystems.karpova.filters;
 
-public class UserFilter {}/*implements Filter {
+public class UserFilter {
+} /*implements Filter {
     private int accessLevel;
 
     public void destroy() {
@@ -24,4 +25,4 @@ public class UserFilter {}/*implements Filter {
         }
     }
 
-}   */
+}*/

@@ -1,11 +1,14 @@
 package ru.tsystems.karpova.service;
 
 import org.apache.log4j.Logger;
-import ru.tsystems.karpova.entities.*;
 import ru.tsystems.karpova.dao.PassengerDAO;
 import ru.tsystems.karpova.dao.StationDAO;
 import ru.tsystems.karpova.dao.TicketDAO;
 import ru.tsystems.karpova.dao.TrainDAO;
+import ru.tsystems.karpova.entities.Passenger;
+import ru.tsystems.karpova.entities.Station;
+import ru.tsystems.karpova.entities.Ticket;
+import ru.tsystems.karpova.entities.Train;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -30,13 +33,6 @@ public class TicketService {
     @EJB
     private StationDAO stationDAO;
 
-    public TicketService() {
-        ticketDAO = new TicketDAO();
-        passengerDAO = new PassengerDAO();
-        trainDAO = new TrainDAO();
-        stationDAO = new StationDAO();
-    }
-
     public String buyTicket(String trainName, String stationFromName, String stationToName, String firstname,
                             String lastname, Date birthday) throws IOException {
         String message = "";
@@ -45,6 +41,15 @@ public class TicketService {
                 || birthday == null || "".equals(firstname) || "".equals(lastname)) {
             log.debug("Send BuyTicketRespondInfo to client with SERVER_ERROR_STATUS");
             message = "Все поля должны быть заполнены!";
+            return message;
+        }
+        if (stationFromName.equals(stationToName)) {
+            message = "Ошибка в выборе станций";
+            return message;
+        }
+        Date currentTime = new Date();
+        if (currentTime.before(birthday)) {
+            message = "Человек еще не родился";
             return message;
         }
         Train train = trainDAO.loadTrain(trainName);
@@ -82,7 +87,7 @@ public class TicketService {
             return message;
         }
         Passenger passenger = passengerDAO.loadPassenger(firstname,
-               lastname, new Timestamp(birthday.getTime()));
+                lastname, new Timestamp(birthday.getTime()));
         if (passenger == null) {
             passenger = new Passenger(firstname,
                     lastname, new Timestamp(birthday.getTime()));

@@ -10,7 +10,7 @@ import javax.persistence.RollbackException;
 import java.util.List;
 
 @Stateless
-public class WayDAO extends BasicDAO{
+public class WayDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(WayDAO.class);
 
@@ -43,7 +43,7 @@ public class WayDAO extends BasicDAO{
         }
     }
 
-    public Way loadWayByStations(String stationA, String stationB){
+    public Way loadWayByStations(String stationA, String stationB) {
         log.debug("Start loadWayByStations select");
         List results = em.createQuery("select way\n" +
                 "from Way way\n" +
@@ -51,7 +51,7 @@ public class WayDAO extends BasicDAO{
                 "inner join way.stationByIdStation2 stationB\n" +
                 "where stationA.name = ?\n" +
                 "and stationB.name = ?")
-                .setParameter(1,stationA)
+                .setParameter(1, stationA)
                 .setParameter(2, stationB)
                 .getResultList();
         return results == null || results.isEmpty() ? null : (Way) results.get(0);

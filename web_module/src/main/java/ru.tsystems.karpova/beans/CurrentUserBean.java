@@ -2,10 +2,11 @@ package ru.tsystems.karpova.beans;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 @SessionScoped
 @ManagedBean(name = "currentUserBean")
-public class CurrentUserBean {
+public class CurrentUserBean implements Serializable {
 
     private String login = "";
     private int accessLevel = 0;

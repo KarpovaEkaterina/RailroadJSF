@@ -4,14 +4,17 @@ import ru.tsystems.karpova.service.RegistrationService;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 @SessionScoped
 @ManagedBean(name = "registrationBean")
-public class RegistrationBean{
+public class RegistrationBean implements Serializable {
 
     @EJB
     private RegistrationService registrationService;
+    @ManagedProperty(value = "#{currentUserBean}")
     private CurrentUserBean currentUserBean;
 
     private int accessLevel = -1;
@@ -56,7 +59,7 @@ public class RegistrationBean{
     public String registration() {
         errorMessage = registrationService.checkUser(login, password);
         if ("".equals(errorMessage)) {
-            if(registrationService.registration(login, password, currentUserBean.getAccessLevel())) {
+            if (registrationService.registration(login, password, currentUserBean.getAccessLevel())) {
                 if (currentUserBean.getAccessLevel() == ACCESS_LEVEL_ADMIN) {
                     return "result_admin_page.xhtml?faces-redirect=true";
                 } else {

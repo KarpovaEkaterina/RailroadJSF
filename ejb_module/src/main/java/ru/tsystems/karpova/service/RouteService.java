@@ -1,11 +1,13 @@
 package ru.tsystems.karpova.service;
 
 import org.apache.log4j.Logger;
-import ru.tsystems.karpova.entities.*;
 import ru.tsystems.karpova.dao.RouteDAO;
 import ru.tsystems.karpova.dao.ScheduleDAO;
 import ru.tsystems.karpova.dao.StationDAO;
 import ru.tsystems.karpova.dao.WayDAO;
+import ru.tsystems.karpova.entities.Route;
+import ru.tsystems.karpova.entities.Schedule;
+import ru.tsystems.karpova.entities.Way;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,7 +16,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 @Stateless
 public class RouteService {
@@ -29,13 +30,6 @@ public class RouteService {
     private WayDAO wayDAO;
     @EJB
     private ScheduleDAO scheduleDAO;
-
-    public RouteService() {
-        routeDAO = new RouteDAO();
-        stationDAO = new StationDAO();
-        wayDAO = new WayDAO();
-        scheduleDAO = new ScheduleDAO();
-    }
 
     public boolean checkWay(List<String> stationsForNewRoute, String newStation) {
         List<Object[]> allWays = wayDAO.getAllWays();
@@ -67,11 +61,11 @@ public class RouteService {
     public String addRoute(List<String> stationsForNewRoute, String routeName) throws IOException {
         String message = "";
         log.debug("Start method \"addRoute\"");
-        if(stationsForNewRoute.size() <= 1) {
+        if (stationsForNewRoute.size() <= 1) {
             message = "Маршрут должен содержать больше одной станции";
             return message;
         }
-        if ("".equals(routeName)){
+        if ("".equals(routeName)) {
             message = "Введите название ";
             return message;
         }

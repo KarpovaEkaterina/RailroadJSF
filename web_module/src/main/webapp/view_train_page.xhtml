@@ -3,11 +3,10 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets">
 
     <h:form>
-        <p:commandButton value="Обновить" update="allTrainsTable" action="#{viewAllTrainsBean.allTrains}"/>
+        <p:commandButton value="Обновить" update="allTrainsTable" action="#{viewAllTrainsBean.updateTrains}"/>
         <br/> <br/>
         <p:dataTable id="allTrainsTable" var="train" value="#{viewAllTrainsBean.allTrains}">
             <p:column headerText="Название поезда">

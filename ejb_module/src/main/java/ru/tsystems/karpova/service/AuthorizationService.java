@@ -10,14 +10,10 @@ import javax.ejb.Stateless;
 @Stateless
 public class AuthorizationService {
 
-    private static Logger log = Logger.getLogger(AuthorizationService.class);
+    private final static Logger log = Logger.getLogger(AuthorizationService.class);
 
     @EJB
-    private UserDAO userDAO;
-
-    public AuthorizationService() {
-        userDAO = new UserDAO();
-    }
+    UserDAO userDAO;
 
     public int login(String login, String password) {
         log.debug("Start \"login\" method");

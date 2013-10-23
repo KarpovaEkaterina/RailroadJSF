@@ -9,12 +9,14 @@ import ru.tsystems.karpova.entities.Route;
 import ru.tsystems.karpova.entities.Train;
 
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Stateless
 public class TrainService {
 
     private static Logger log = Logger.getLogger(TrainService.class);
@@ -25,13 +27,6 @@ public class TrainService {
     private PassengerDAO passengerDAO;
     @EJB
     private RouteDAO routeDAO;
-
-    public TrainService() {
-        trainDAO = new TrainDAO();
-        passengerDAO = new PassengerDAO();
-
-        routeDAO = new RouteDAO();
-    }
 
     public List<Object[]> viewPassengerByTrain(String trainName) throws IOException {
         List<Object[]> allPassengerByTrain = new ArrayList<Object[]>();
@@ -77,7 +72,7 @@ public class TrainService {
             return message;
         }
         Date currentTime = new Date();
-        if(!currentTime.before(departureTime)){
+        if (!currentTime.before(departureTime)) {
             message = "Время отправления уже прошло";
             return message;
         }

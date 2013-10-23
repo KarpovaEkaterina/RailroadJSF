@@ -6,11 +6,12 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 
 @SessionScoped
 @ManagedBean(name = "getAllRoutesBean")
-public class GetAllRoutesBean {
+public class GetAllRoutesBean implements Serializable {
 
     @EJB
     private RouteService routeService;

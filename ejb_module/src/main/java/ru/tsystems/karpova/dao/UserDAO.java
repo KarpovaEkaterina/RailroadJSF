@@ -10,7 +10,7 @@ import javax.persistence.RollbackException;
 import java.util.List;
 
 @Stateless
-public class UserDAO extends BasicDAO{
+public class UserDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(UserDAO.class);
 

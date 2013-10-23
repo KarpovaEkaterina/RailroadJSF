@@ -7,11 +7,10 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-public class StationDAO extends BasicDAO{
+public class StationDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(StationDAO.class);
 

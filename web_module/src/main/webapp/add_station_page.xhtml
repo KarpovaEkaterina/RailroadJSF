@@ -8,10 +8,10 @@
     <h:form>
         <h:panelGrid columns="1" style="margin-bottom:10px" cellpadding="5">
             <h:outputText value="Название новой станции"/>
-            <h:inputText value="#{addStationBean.stationName}" style="width: 200px"/>
+            <h:inputText id="addStationInputName" value="#{addStationBean.stationName}" style="width: 200px"/>
         </h:panelGrid>
         <p:commandButton action="#{addStationBean.addStation}"
-                         update="addStationResultDisplay, :#{p:component('listAllStations')}"
+                         update="addStationResultDisplay"
                          value="Добавить"
                          oncomplete="PF('addStationResultDialog').show();" type="submit"/>
 
@@ -19,6 +19,9 @@
                   widgetVar="addStationResultDialog">
             <h:panelGrid id="addStationResultDisplay" columns="1">
                 <h:outputText value="#{addStationBean.message}"/>
+                <p:commandButton action="#{addStationBean.updatePage}" value="Ok"
+                                 update="addStationInputName"
+                                 oncomplete="PF('addStationResultDialog').hide();"/>
             </h:panelGrid>
         </p:dialog>
 

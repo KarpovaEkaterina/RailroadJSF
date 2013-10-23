@@ -18,10 +18,6 @@ public class StationService {
     @EJB
     private StationDAO stationDAO;
 
-    public StationService() {
-        this.stationDAO = new StationDAO();
-    }
-
     public String addStation(String stationName) throws IOException {
         String message = "";
         log.debug("Start method \"addStation\"");

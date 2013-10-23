@@ -6,12 +6,13 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @SessionScoped
 @ManagedBean(name = "viewAllTrainsBean")
-public class ViewAllTrainsBean {
+public class ViewAllTrainsBean implements Serializable {
 
     @EJB
     private TrainService trainService;
@@ -19,8 +20,11 @@ public class ViewAllTrainsBean {
     private List<Object[]> allTrains = new ArrayList<Object[]>();
 
     public List<Object[]> getAllTrains() throws IOException {
-        allTrains = trainService.viewAllTrains();
         return allTrains;
+    }
+
+    public void updateTrains() throws IOException {
+        allTrains = trainService.viewAllTrains();
     }
 
     public void setAllTrains(List<Object[]> allTrains) {

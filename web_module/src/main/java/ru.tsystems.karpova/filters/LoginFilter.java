@@ -1,6 +1,7 @@
 package ru.tsystems.karpova.filters;
 
-public class LoginFilter {}/*implements Filter {
+public class LoginFilter {
+}/*implements Filter {
     public void destroy() {
     }
 
@@ -19,4 +20,4 @@ public class LoginFilter {}/*implements Filter {
     public void init(FilterConfig config) throws ServletException {
     }
 
-}  */
+}*/

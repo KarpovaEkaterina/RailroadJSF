@@ -7,12 +7,13 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @SessionScoped
 @ManagedBean(name = "viewPassengerByTrainBean")
-public class ViewPassengerByTrainBean {
+public class ViewPassengerByTrainBean implements Serializable {
 
     @EJB
     private TrainService trainService;

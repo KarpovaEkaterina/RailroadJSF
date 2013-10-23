@@ -10,7 +10,7 @@ import javax.persistence.RollbackException;
 import java.util.List;
 
 @Stateless
-public class RouteDAO extends BasicDAO{
+public class RouteDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(RouteDAO.class);
 

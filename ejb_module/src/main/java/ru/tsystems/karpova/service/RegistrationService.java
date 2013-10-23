@@ -18,10 +18,6 @@ public class RegistrationService {
     public static final int ACCESS_LEVEL_MANAGER = 2;
     public static final int ACCESS_LEVEL_ADMIN = 3;
 
-    public RegistrationService() {
-        userDAO = new UserDAO();
-    }
-
     public String checkUser(String login, String password) {
         String errorMessage = "";
         log.debug("Start \"registration\" method");

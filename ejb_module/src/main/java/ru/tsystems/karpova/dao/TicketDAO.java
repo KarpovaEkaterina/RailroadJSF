@@ -9,7 +9,7 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
 
 @Stateless
-public class TicketDAO extends BasicDAO{
+public class TicketDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(TicketDAO.class);
 

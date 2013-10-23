@@ -1,23 +1,24 @@
 package ru.tsystems.karpova.beans;
 
+import ru.tsystems.karpova.service.RouteService;
+
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import java.io.IOException;
-import java.lang.Object;
-import java.lang.String;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.faces.bean.ManagedBean;
-import javax.ejb.EJB;
-import javax.faces.bean.SessionScoped;
-
-import ru.tsystems.karpova.service.RouteService;
 
 @SessionScoped
 @ManagedBean(name = "addRouteBean")
-public class AddRouteBean {
+public class AddRouteBean implements Serializable {
 
     @EJB
     private RouteService routeService;
+    @ManagedProperty(value = "#{addWayBean}")
     private AddWayBean addWayBean;
 
     private String message = "";
@@ -108,15 +109,35 @@ public class AddRouteBean {
         }
     }
 
-    public void addRoute() {
-        try {
-            message = routeService.addRoute(stationsForNewRoute, routeName);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public String updatePage() {
+        if ("Маршрут успешно добавлен".equals(message)) {
+            addWaysForm = false;
+            stationsForNewRoute = new ArrayList<String>();
+            showDialog = "";
+            routeName = "";
+            addWayBean.setAddWaysResult("");
+            return "manager_page.xhtml?faces-redirect=true";
         }
+        return "";
+    }
+
+    public void addRoute() throws IOException {
+        message = routeService.addRoute(stationsForNewRoute, routeName);
     }
 
     public void setAddWayBean(AddWayBean addWayBean) {
         this.addWayBean = addWayBean;
+    }
+
+    public void addWay() {
+        if (addWayBean.getPrice() == null || addWayBean.getPrice() <= 0 || addWayBean.getTime() == null) {
+            addWayBean.setAddWaysResult("Поля некорректно заполнены");
+            return;
+        }
+        addWaysForm = false;
+        stationsForNewRoute.add(newStation);
+        addWayBean.setStationA(stationsForNewRoute.get(stationsForNewRoute.size() - 2));
+        addWayBean.setStationB(stationsForNewRoute.get(stationsForNewRoute.size() - 1));
+        addWayBean.setAddWaysResult(routeService.addWay(addWayBean.getPrice(), addWayBean.getTime(), addWayBean.getStationA(), addWayBean.getStationB()));
     }
 }

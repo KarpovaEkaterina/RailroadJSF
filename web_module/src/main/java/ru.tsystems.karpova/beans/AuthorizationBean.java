@@ -4,15 +4,18 @@ import ru.tsystems.karpova.service.AuthorizationService;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
 
 @SessionScoped
 @ManagedBean(name = "authorizationBean")
-public class AuthorizationBean {
+public class AuthorizationBean implements Serializable {
 
     @EJB
-    private AuthorizationService authorizationService;
+    AuthorizationService authorizationService;
+    @ManagedProperty(value = "#{currentUserBean}")
     private CurrentUserBean currentUserBean;
 
     private String userName = null;
@@ -60,9 +63,9 @@ public class AuthorizationBean {
         return "authorization.xhtml?faces-redirect=true";
     }
 
-    public String login(){
+    public String login() {
         errorMessage = "";
-         currentUserBean.setAccessLevel(authorizationService.login(userName, password));
+        currentUserBean.setAccessLevel(authorizationService.login(userName, password));
         if (currentUserBean.getAccessLevel() == ACCESS_LEVEL_GUEST) {
             errorMessage = "Неправильный логин или пароль";
             return "";

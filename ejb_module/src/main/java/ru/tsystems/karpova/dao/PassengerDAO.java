@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class PassengerDAO extends BasicDAO{
+public class PassengerDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(PassengerDAO.class);
 
