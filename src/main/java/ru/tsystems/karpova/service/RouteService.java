@@ -1,116 +1,85 @@
 package ru.tsystems.karpova.service;
 
 import org.apache.log4j.Logger;
-import ru.tsystems.karpova.beans.AddRouteBean;
-import ru.tsystems.karpova.beans.AddWayBean;
-import ru.tsystems.karpova.entities.*;
 import ru.tsystems.karpova.dao.RouteDAO;
 import ru.tsystems.karpova.dao.ScheduleDAO;
 import ru.tsystems.karpova.dao.StationDAO;
 import ru.tsystems.karpova.dao.WayDAO;
+import ru.tsystems.karpova.entities.Route;
+import ru.tsystems.karpova.entities.Schedule;
+import ru.tsystems.karpova.entities.Way;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
+@Stateless
 public class RouteService {
 
     private static Logger log = Logger.getLogger(RouteService.class);
 
+    @EJB
     private RouteDAO routeDAO;
+    @EJB
     private StationDAO stationDAO;
+    @EJB
     private WayDAO wayDAO;
+    @EJB
     private ScheduleDAO scheduleDAO;
-    private User user;
-    private AddRouteBean addNewRouteBean;
-    private String message = "";
-    private String showDialog = "";
-    private boolean addWaysForm = false;
-    private String addWaysResult = "";
-    private AddWayBean addNewWayBean;
 
-    public RouteService() {
-        routeDAO = new RouteDAO();
-        stationDAO = new StationDAO();
-        wayDAO = new WayDAO();
-        scheduleDAO = new ScheduleDAO();
-    }
-
-    public boolean checkWay() {
+    public boolean checkWay(List<String> stationsForNewRoute, String newStation) {
         List<Object[]> allWays = wayDAO.getAllWays();
         for (Object[] way : allWays) {
-            if (way[0].equals(addNewRouteBean.getStationsForNewRoute().get(addNewRouteBean.getStationsForNewRoute().size() - 1))
-                    && way[1].equals(addNewRouteBean.getNewStation())) {
-                addNewRouteBean.getStationsForNewRoute().add(addNewRouteBean.getNewStation());
+            if (way[0].equals(stationsForNewRoute.get(stationsForNewRoute.size() - 1))
+                    && way[1].equals(newStation)) {
+                stationsForNewRoute.add(newStation);
                 return false;
             }
         }
         return true;
     }
 
-    public void addWay() {
-        if ("".equals(addNewWayBean.getPrice()) || addNewWayBean.getPrice() <= 0 || addNewWayBean.getTime() == null) {
-            addWaysResult = "Поля некорректно заполнены";
-            return;
-        }
+    public String addWay(Double price, Date time, String stationA, String stationB) {
+        String addWaysResult = "";
         Way way = new Way();
-        addNewRouteBean.getStationsForNewRoute().add(addNewRouteBean.getNewStation());
-        addNewWayBean.setStationA(addNewRouteBean.getStationsForNewRoute().get(addNewRouteBean.getStationsForNewRoute().size() - 2));
-        addNewWayBean.setStationB(addNewRouteBean.getStationsForNewRoute().get(addNewRouteBean.getStationsForNewRoute().size() - 1));
-        way.setStationByIdStation1(stationDAO.loadStationByName(addNewWayBean.getStationA()));
-        way.setStationByIdStation2(stationDAO.loadStationByName(addNewWayBean.getStationB()));
-        way.setPrice(addNewWayBean.getPrice());
-        way.setTime(new Timestamp(addNewWayBean.getTime().getTime()));
+        way.setStationByIdStation1(stationDAO.loadStationByName(stationA));
+        way.setStationByIdStation2(stationDAO.loadStationByName(stationB));
+        way.setPrice(price);
+        way.setTime(new Timestamp(time.getTime()));
         if (!wayDAO.saveWay(way)) {
             addWaysResult = "Server error";
-            return;
+            return addWaysResult;
         }
         addWaysResult = "Путь добавлен";
+        return addWaysResult;
     }
 
-    public void addNewStationByList() {
-        showDialog = "";
-        addWaysForm = false;
-        addWaysResult = "";
-        addNewWayBean.setPrice(0.0);
-        addNewWayBean.setTime(null);
-        if (!addNewRouteBean.getStationsForNewRoute().contains(addNewRouteBean.getNewStation())) {
-            showDialog = "Станция добавлена";
-            if (addNewRouteBean.getStationsForNewRoute().size() > 0) {
-                addWaysForm = checkWay();
-            } else {
-                addNewRouteBean.getStationsForNewRoute().add(addNewRouteBean.getNewStation());
-                addWaysForm = false;
-            }
-        } else {
-            showDialog = "Станция уже была добавлена";
-            addWaysForm = false;
-        }
-    }
-
-    public void addRoute() throws IOException {
+    public String addRoute(List<String> stationsForNewRoute, String routeName) throws IOException {
+        String message = "";
         log.debug("Start method \"addRoute\"");
-        if(addNewRouteBean.getStationsForNewRoute().size() <= 1) {
+        if (stationsForNewRoute.size() <= 1) {
             message = "Маршрут должен содержать больше одной станции";
-            return;
+            return message;
         }
-        if ("".equals(addNewRouteBean.getRouteName())){
+        if ("".equals(routeName)) {
             message = "Введите название ";
-            return;
+            return message;
         }
         Route route = new Route();
-        route.setName(addNewRouteBean.getRouteName());
+        route.setName(routeName);
         if (!routeDAO.saveRoute(route)) {
             log.debug("Send AddRouteRespondInfo to client with SERVER_ERROR_STATUS");
             message = "Server error status";
-            return;
+            return message;
         }
         List<Schedule> schedules = new ArrayList<Schedule>();
         route = routeDAO.loadRoute(route.getName());
-        for (int i = 1; i < addNewRouteBean.getStationsForNewRoute().size(); i++) {
-            Way way = wayDAO.loadWayByStations(addNewRouteBean.getStationsForNewRoute().get(i - 1), addNewRouteBean.getStationsForNewRoute().get(i));
+        for (int i = 1; i < stationsForNewRoute.size(); i++) {
+            Way way = wayDAO.loadWayByStations(stationsForNewRoute.get(i - 1), stationsForNewRoute.get(i));
             Schedule schedule = new Schedule();
             schedule.setRouteByIdRoute(route);
             schedule.setWayByIdWay(way);
@@ -119,12 +88,12 @@ public class RouteService {
             if (!scheduleDAO.saveSchedule(schedule)) {
                 log.debug("Send AddRouteRespondInfo to client with SERVER_ERROR_STATUS");
                 message = "Server error status";
-                return;
+                return message;
             }
         }
         log.debug("Send AddRouteRespondInfo to client with OK_STATUS");
         message = "Маршрут успешно добавлен";
-        return;
+        return message;
     }
 
     public List<String> getAllRoutes() throws IOException {
@@ -136,61 +105,5 @@ public class RouteService {
         }
         log.debug("Send GetAllRoutesRespondInfo to client");
         return allRoutes;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setAddNewRouteBean(AddRouteBean addNewRouteBean) {
-        this.addNewRouteBean = addNewRouteBean;
-    }
-
-    public AddRouteBean getAddNewRouteBean() {
-        return addNewRouteBean;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getShowDialog() {
-        return showDialog;
-    }
-
-    public void setShowDialog(String showDialog) {
-        this.showDialog = showDialog;
-    }
-
-    public boolean getAddWaysForm() {
-        return addWaysForm;
-    }
-
-    public void setAddWaysForm(boolean addWaysForm) {
-        this.addWaysForm = addWaysForm;
-    }
-
-    public void setAddNewWayBean(AddWayBean addNewWayBean) {
-        this.addNewWayBean = addNewWayBean;
-    }
-
-    public AddWayBean getAddNewWayBean() {
-        return addNewWayBean;
-    }
-
-    public String getAddWaysResult() {
-        return addWaysResult;
-    }
-
-    public void setAddWaysResult(String addWaysResult) {
-        this.addWaysResult = addWaysResult;
     }
 }

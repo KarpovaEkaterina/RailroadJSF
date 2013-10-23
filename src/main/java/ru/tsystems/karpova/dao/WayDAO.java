@@ -3,12 +3,14 @@ package ru.tsystems.karpova.dao;
 import org.apache.log4j.Logger;
 import ru.tsystems.karpova.entities.Way;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
 import java.util.List;
 
-public class WayDAO extends BasicDAO{
+@Stateless
+public class WayDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(WayDAO.class);
 
@@ -41,7 +43,7 @@ public class WayDAO extends BasicDAO{
         }
     }
 
-    public Way loadWayByStations(String stationA, String stationB){
+    public Way loadWayByStations(String stationA, String stationB) {
         log.debug("Start loadWayByStations select");
         List results = em.createQuery("select way\n" +
                 "from Way way\n" +
@@ -49,7 +51,7 @@ public class WayDAO extends BasicDAO{
                 "inner join way.stationByIdStation2 stationB\n" +
                 "where stationA.name = ?\n" +
                 "and stationB.name = ?")
-                .setParameter(1,stationA)
+                .setParameter(1, stationA)
                 .setParameter(2, stationB)
                 .getResultList();
         return results == null || results.isEmpty() ? null : (Way) results.get(0);

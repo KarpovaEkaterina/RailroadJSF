@@ -22,15 +22,15 @@
                 <h:outputText value="Пароль" styleClass="ui-widget"/>
                 <h:inputSecret value="#{registrationBean.password}" size="20"/>
                 <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                    <p:commandButton action="#{regService.registration}" value="Зарегистрироваться"
+                    <p:commandButton action="#{registrationBean.registration}" value="Зарегистрироваться"
                                      update=":#{p:component('errorMessage')}"/>
                     <a class="link" href="authorization.xhtml">Выход</a>
                 </h:panelGrid>
             </h:panelGrid>
 
             <p:outputPanel id="errorMessage" style="display:block;margin-top:10px;">
-                <h:outputText value="#{regService.errorMessage}"
-                              rendered="#{not empty regService.errorMessage}"
+                <h:outputText value="#{registrationBean.errorMessage}"
+                              rendered="#{not empty registrationBean.errorMessage}"
                               styleClass="ui-widget"/>
             </p:outputPanel>
         </h:form>

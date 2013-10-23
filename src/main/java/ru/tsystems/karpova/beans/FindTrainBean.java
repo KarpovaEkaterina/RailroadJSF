@@ -1,13 +1,28 @@
 package ru.tsystems.karpova.beans;
 
-import java.util.Date;
+import ru.tsystems.karpova.service.TrainService;
 
-public class FindTrainBean {
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@SessionScoped
+@ManagedBean(name = "findTrainBean")
+public class FindTrainBean implements Serializable {
+
+    @EJB
+    private TrainService trainService;
 
     private String stationFrom;
     private String stationTo;
     private Date dateFrom;
     private Date dateTo;
+    private List<Object[]> scheduleTrainsByStation = new ArrayList<Object[]>();
 
     public void setStationFrom(String stationFrom) {
         this.stationFrom = stationFrom;
@@ -39,5 +54,17 @@ public class FindTrainBean {
 
     public Date getDateTo() {
         return dateTo;
+    }
+
+    public List<Object[]> getScheduleTrainsByStation() {
+        return scheduleTrainsByStation;
+    }
+
+    public void setScheduleTrainsByStation(List<Object[]> scheduleTrainsByStation) {
+        this.scheduleTrainsByStation = scheduleTrainsByStation;
+    }
+
+    public void findTrain() throws IOException {
+        scheduleTrainsByStation = trainService.findTrain(stationFrom, stationTo, dateFrom, dateTo);
     }
 }

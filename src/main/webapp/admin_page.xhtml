@@ -23,14 +23,14 @@
                 <h:inputText value="#{registrationBean.login}" size="20"/>
                 <h:outputText value="Пароль" styleClass="ui-widget"/>
                 <h:inputSecret value="#{registrationBean.password}" size="20"/>
-                <p:commandButton action="#{regService.registration}" value="Добавить"
+                <p:commandButton action="#{registrationBean.registration}" value="Добавить"
                                  update=":#{p:component('errorMessage')}"/>
-                <p:commandButton action="#{authService.logout}" value="Выход"/>
+                <p:commandButton action="#{authorizationBean.logout}" value="Выход"/>
             </h:panelGrid>
 
             <p:outputPanel id="errorMessage" style="display:block;margin-top:10px;">
-                <h:outputText value="#{regService.errorMessage}"
-                              rendered="#{not empty regService.errorMessage}"
+                <h:outputText value="#{registrationBean.errorMessage}"
+                              rendered="#{not empty registrationBean.errorMessage}"
                               styleClass="ui-widget"/>
             </p:outputPanel>
         </h:form>

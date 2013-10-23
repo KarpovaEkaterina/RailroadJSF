@@ -1,79 +1,30 @@
 package ru.tsystems.karpova.service;
 
-import org.apache.log4j.Logger;
 import ru.tsystems.karpova.dao.UserDAO;
 import ru.tsystems.karpova.entities.User;
-import ru.tsystems.karpova.beans.AuthorizationBean;
 
-import javax.faces.context.FacesContext;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
+@Stateless
 public class AuthorizationService {
 
-    private static Logger log = Logger.getLogger(AuthorizationService.class);
+    //private static Logger log = Logger.getLogger(AuthorizationService.class);
 
-    private UserDAO userDAO;
-    private AuthorizationBean authBean;
-    private String errorMessage = "";
-    private String errorVisibility = "invisible";
-    private User user;
-    public static final int ACCESS_LEVEL_PASSENGER = 1;
-    public static final int ACCESS_LEVEL_MANAGER = 2;
-    public static final int ACCESS_LEVEL_ADMIN = 3;
+    @EJB
+    UserDAO userDAO;
 
-    public AuthorizationService() {
-        userDAO = new UserDAO();
-    }
-
-    public String logout() {
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
-        return "authorization.xhtml?faces-redirect=true";
-    }
-
-    public String login() {
-        log.debug("Start \"login\" method");
-        log.info(authBean.getLogin() + " is trying to authorize");
-        User user = userDAO.loadUserByLogin(authBean.getLogin());
-        if (user == null || user.getPassword() == null || !user.getPassword().equals(authBean.getPassword())) {
-            log.info("Authorization error.");
-            errorMessage = "Неправильный логин или пароль";
-            errorVisibility = "visible";
-            log.debug("Send AuthorizationRespondInfo to client with WRONG_CREDENTIALS_STATUS");
-            return "";
+    public int login(String login, String password) {
+        //log.debug("Start \"login\" method");
+        //log.info(login + " is trying to authorize");
+        User user = userDAO.loadUserByLogin(login);
+        if (user == null || user.getPassword() == null || !user.getPassword().equals(password)) {
+            //log.info("Authorization error.");
+            //log.debug("Send AuthorizationRespondInfo to client with WRONG_CREDENTIALS_STATUS");
+            return 0;
         }
-        log.info("Auth passed");
-        log.debug("Send AuthorizationRespondInfo to client with OK_STATUS");
-        this.user.setLogin(user.getLogin());
-        this.user.setPassword(user.getPassword());
-        this.user.setAccessLevel(user.getAccessLevel());
-        if (user.getAccessLevel() == ACCESS_LEVEL_ADMIN) {
-            return "admin_page.xhtml?faces-redirect=true";
-        } else if (user.getAccessLevel() == ACCESS_LEVEL_MANAGER) {
-            return "manager_page.xhtml?faces-redirect=true";
-        }
-        return "passenger_page.xhtml?faces-redirect=true";
-    }
-
-    public void setAuthBean(AuthorizationBean authBean) {
-        this.authBean = authBean;
-    }
-
-    public AuthorizationBean getAuthBean() {
-        return authBean;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public String getErrorVisibility() {
-        return errorVisibility;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
+        //log.info("Auth passed");
+        //log.debug("Send AuthorizationRespondInfo to client with OK_STATUS");
+        return user.getAccessLevel();
     }
 }

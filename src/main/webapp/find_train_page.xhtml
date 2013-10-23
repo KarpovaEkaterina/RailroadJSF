@@ -12,19 +12,19 @@
             <h:outputText value="Станция прибытия"/>
             <h:outputText value="Время отправления"/>
             <h:outputText value="Время прибытия"/>
-            <p:selectOneMenu value="#{findTrainsBean.stationFrom}" effect="fade" style="width: 200px">
+            <p:selectOneMenu value="#{findTrainBean.stationFrom}" effect="fade" style="width: 200px">
                 <f:selectItem/>
-                <f:selectItems value="#{stationService.allStation}"/>
+                <f:selectItems value="#{getAllStationsBean.allStation}"/>
             </p:selectOneMenu>
-            <p:selectOneMenu value="#{findTrainsBean.stationTo}" effect="fade" style="width: 200px">
+            <p:selectOneMenu value="#{findTrainBean.stationTo}" effect="fade" style="width: 200px">
                 <f:selectItem/>
-                <f:selectItems value="#{stationService.allStation}"/>
+                <f:selectItems value="#{getAllStationsBean.allStation}"/>
             </p:selectOneMenu>
-            <p:calendar value="#{findTrainsBean.dateFrom}" showButtonPanel="true" style="width: 200px"/>
-            <p:calendar value="#{findTrainsBean.dateTo}" showButtonPanel="true" style="width: 200px"/>
-            <p:commandButton value="Найти" update="table" action="#{trainService.findTrain}"/>
+            <p:calendar value="#{findTrainBean.dateFrom}" showButtonPanel="true" style="width: 200px"/>
+            <p:calendar value="#{findTrainBean.dateTo}" showButtonPanel="true" style="width: 200px"/>
+            <p:commandButton value="Найти" update="table" action="#{findTrainBean.findTrain}"/>
         </h:panelGrid>
-        <p:dataTable id="table" var="findTrain" value="#{trainService.scheduleTrainsByStation}" >
+        <p:dataTable id="table" var="findTrain" value="#{findTrainBean.scheduleTrainsByStation}">
             <p:column headerText="Название поезда">
                 <h:outputText value="#{findTrain[0]}"/>
             </p:column>

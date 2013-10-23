@@ -3,11 +3,13 @@ package ru.tsystems.karpova.dao;
 import org.apache.log4j.Logger;
 import ru.tsystems.karpova.entities.Ticket;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
 
-public class TicketDAO extends BasicDAO{
+@Stateless
+public class TicketDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(TicketDAO.class);
 

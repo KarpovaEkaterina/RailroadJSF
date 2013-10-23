@@ -19,19 +19,19 @@
         <h:form>
             <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
                 <h:outputText value="Имя пользователя" styleClass="ui-widget"/>
-                <h:inputText value="#{authorizationBean.login}" size="20"/>
+                <h:inputText value="#{authorizationBean.userName}" size="20"/>
                 <h:outputText value="Пароль" styleClass="ui-widget"/>
                 <h:inputSecret value="#{authorizationBean.password}" size="20"/>
                 <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-                    <p:commandButton action="#{authService.login}" value="Вход"
+                    <p:commandButton action="#{authorizationBean.login}" value="Вход"
                                      update=":#{p:component('errorMessage')}"/>
                     <a class="link" href="registration.xhtml">Регистрация</a>
                 </h:panelGrid>
             </h:panelGrid>
 
             <p:outputPanel id="errorMessage" style="display:block;margin-top:10px;">
-                <h:outputText value="#{authService.errorMessage}"
-                              rendered="#{not empty authService.errorMessage}"
+                <h:outputText value="#{authorizationBean.errorMessage}"
+                              rendered="#{not empty authorizationBean.errorMessage}"
                               styleClass="ui-widget"/>
             </p:outputPanel>
         </h:form>

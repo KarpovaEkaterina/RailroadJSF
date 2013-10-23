@@ -15,13 +15,17 @@
 
             <p:commandButton value="Добавить станцию" onclick="PF('addStationToRouteDialog').show()"/>
 
-            <p:commandButton action="#{routeService.addRoute}" update="addRouteResultDisplay" value="Добавить маршрут"
+            <p:commandButton action="#{addRouteBean.addRoute}" update="addRouteResultDisplay" value="Добавить маршрут"
                              onclick="PF('addRouteResultDialog').show()"/>
 
             <p:dialog header="Информация" modal="true" showEffect="fade" hideEffect="fade"
                       widgetVar="addRouteResultDialog">
                 <h:panelGrid id="addRouteResultDisplay" columns="1">
-                    <h:outputText value="#{routeService.message}"/>
+                    <h:outputText value="#{addRouteBean.message}"/>
+                    <p:commandButton action="#{addRouteBean.updatePage}"
+                                     onclick="PF('addRouteResultDialog').hide()"
+                                     value="Ok"
+                                     update=":#{p:component('addRouteForm')}, :#{p:component('stationsTable')} "/>
                 </h:panelGrid>
             </p:dialog>
 
@@ -33,11 +37,11 @@
                         <p:selectOneMenu id="station" value="#{addRouteBean.newStation}" effect="fade"
                                          style="width: 200px">
                             <f:selectItem/>
-                            <f:selectItems id="listAllStations" value="#{stationService.allStation}"/>
+                            <f:selectItems id="listAllStations" value="#{getAllStationsBean.allStation}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
 
-                    <p:commandButton id="submitButton" value="Добавить" action="#{routeService.addNewStationByList}"
+                    <p:commandButton id="submitButton" value="Добавить" action="#{addRouteBean.addNewStationByList}"
                                      update=":#{p:component('addStationToRouteResult')}, :#{p:component('stationsTable')}"
                                      oncomplete="PF('addStationToRouteDialog').hide();"/>
 
@@ -45,28 +49,26 @@
             </p:dialog>
 
             <p:outputPanel id="addStationToRouteResult" style="display:block;margin-top:10px;">
-                <h:outputText value="#{routeService.showDialog}" style="color: red"/>
-                <h:panelGrid columns="1" rendered="#{routeService.addWaysForm}">
+                <h:outputText value="#{addRouteBean.showDialog}" style="color: red"/>
+                <h:panelGrid columns="1" id="addWaysPanel" rendered="#{addRouteBean.addWaysForm}">
                     <h:outputText value="Путь не найден"/>
                     <h:outputText value="Цена"/>
                     <h:inputText value="#{addWayBean.price}"/>
                     <h:outputText value="Время в пути"/>
                     <p:calendar value="#{addWayBean.time}" pattern="HH:mm" timeOnly="true"/>
                 </h:panelGrid>
-                <p:commandButton value="Добавить" action="#{routeService.addWay}"
-                                 update="addWaysResultDisplay, :#{p:component('stationsTable')}"
-                                 rendered="#{routeService.addWaysForm}"/>
+                <p:commandButton value="Добавить" action="#{addRouteBean.addWay}"
+                                 update="addWaysResultDisplay, :#{p:component('stationsTable')}, addStationToRouteResult"
+                                 rendered="#{addRouteBean.addWaysForm}"/>
 
                 <p:outputPanel id="addWaysResultDisplay" style="display:block;margin-top:10px;">
-                    <h:outputText value="#{routeService.addWaysResult}"
-                                  rendered="#{not empty routeService.addWaysResult}"/>
+                    <h:outputText value="#{addWayBean.addWaysResult}"
+                                  rendered="#{not empty addWayBean.addWaysResult}"/>
                 </p:outputPanel>
             </p:outputPanel>
-
-
         </h:form>
         <p:dataTable id="stationsTable" var="station" value="#{addRouteBean.stationsForNewRoute}"
-                style="position:absolute; top: 90px; padding-left: inherit;">
+                     style="position:absolute; top: 90px; padding-left: inherit;">
             <p:column headerText="Станции в маршруте">
                 <h:outputText value="#{station}"/>
             </p:column>

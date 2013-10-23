@@ -11,20 +11,20 @@
             <h:outputText value="Номер поезда"/>
             <p:selectOneMenu value="#{buyTicketBean.train}" effect="fade" style="width: 200px">
                 <f:selectItem/>
-                <f:selectItems value="#{ticketService.listAllTrains}"/>
+                <f:selectItems value="#{getAllTrainsBean.allTrains}"/>
                 <p:ajax update="stations"
-                        listener="#{ticketService.updateStationsByTrain}"/>
+                        listener="#{buyTicketBean.updateStationsByTrain}"/>
             </p:selectOneMenu>
             <h:panelGrid columns="1" id="stations">
                 <h:outputText value="Станция отправления"/>
                 <p:selectOneMenu value="#{buyTicketBean.stationFrom}" effect="fade" style="width: 200px">
                     <f:selectItem/>
-                    <f:selectItems value="#{ticketService.listAllStationsByTrain}"/>
+                    <f:selectItems value="#{buyTicketBean.listAllStationsByTrain}"/>
                 </p:selectOneMenu>
                 <h:outputText value="Станция прибытия"/>
                 <p:selectOneMenu value="#{buyTicketBean.stationTo}" effect="fade" style="width: 200px">
                     <f:selectItem/>
-                    <f:selectItems value="#{ticketService.listAllStationsByTrain}"/>
+                    <f:selectItems value="#{buyTicketBean.listAllStationsByTrain}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
             <h:outputText value="Имя"/><h:inputText value="#{buyTicketBean.firstname}" style="width: 200px"/>
@@ -32,12 +32,12 @@
             <h:outputText value="Дата рождения"/><p:calendar value="#{buyTicketBean.birthday}"
                                                              showButtonPanel="true" style="width: 200px"/>
         </h:panelGrid>
-        <p:commandButton value="Покупка" update="display" action="#{ticketService.buyTicket}"
+        <p:commandButton value="Покупка" update="display" action="#{buyTicketBean.buyTicket}"
                          onclick="PF('dlg').show();"/>
 
         <p:dialog header="Информация" modal="true" showEffect="fade" hideEffect="fade" widgetVar="dlg">
             <h:panelGrid columns="1" id="display">
-                <h:outputText value="#{ticketService.message}"/>
+                <h:outputText value="#{buyTicketBean.message}"/>
             </h:panelGrid>
         </p:dialog>
 

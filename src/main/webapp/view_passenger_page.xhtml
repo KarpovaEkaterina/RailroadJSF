@@ -11,14 +11,14 @@
             <h:outputText value="Номер поезда"/>
             <p:selectOneMenu value="#{viewPassengerByTrainBean.trainName}" effect="fade" style="width: 200px">
                 <f:selectItem/>
-                <f:selectItems value="#{ticketService.listAllTrains}"/>
+                <f:selectItems value="#{getAllTrainsBean.allTrains}"/>
                 <p:ajax update="loadPassengersButton"/>
             </p:selectOneMenu>
             <p:commandButton id="loadPassengersButton" value="Просмотр" update="tableWithPass"
-                             action="#{trainService.viewPassengerByTrain}"
+                             action="#{viewPassengerByTrainBean.viewPassengerByTrain}"
                              disabled="#{empty viewPassengerByTrainBean.trainName}"/>
         </h:panelGrid>
-        <p:dataTable id="tableWithPass" var="paseenger" value="#{trainService.allPassengerByTrain}">
+        <p:dataTable id="tableWithPass" var="paseenger" value="#{viewPassengerByTrainBean.allPassengerByTrain}">
             <p:column headerText="Имя">
                 <h:outputText value="#{paseenger[0]}"/>
             </p:column>

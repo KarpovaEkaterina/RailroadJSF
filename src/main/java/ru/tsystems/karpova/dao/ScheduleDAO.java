@@ -3,11 +3,13 @@ package ru.tsystems.karpova.dao;
 import org.apache.log4j.Logger;
 import ru.tsystems.karpova.entities.Schedule;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
 
-public class ScheduleDAO extends BasicDAO{
+@Stateless
+public class ScheduleDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(ScheduleDAO.class);
 

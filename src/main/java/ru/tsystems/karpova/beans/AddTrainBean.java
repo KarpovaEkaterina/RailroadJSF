@@ -1,13 +1,34 @@
 package ru.tsystems.karpova.beans;
 
-import java.util.Date;
+import ru.tsystems.karpova.service.TrainService;
 
-public class AddTrainBean {
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+@SessionScoped
+@ManagedBean(name = "addTrainBean")
+public class AddTrainBean implements Serializable {
+
+
+    @EJB
+    private TrainService trainService;
 
     private String trainName;
     private String route;
     private int totalSeats;
     private Date departureTime;
+    private String message = "";
+    private List<Integer> totalSeatsValues;
+
+    public int getTotalSeats() {
+        return totalSeats;
+    }
 
     public void setDepartureTime(Date departureTime) {
         this.departureTime = departureTime;
@@ -37,11 +58,42 @@ public class AddTrainBean {
         return route;
     }
 
-    public int getTotalSeats() {
-        return totalSeats;
+    public List<Integer> getTotalSeatsValues() {
+        totalSeatsValues = new ArrayList<Integer>();
+        for (int i = 1; i <= 100; i++) {
+            totalSeatsValues.add(i);
+        }
+        return totalSeatsValues;
     }
 
     public Date getDepartureTime() {
         return departureTime;
+    }
+
+    public void addTrain() throws IOException {
+        message = trainService.addTrain(trainName, route, totalSeats, departureTime);
+    }
+
+    public String updatePage() {
+        if ("Поезд добавлен".equals(message)) {
+            departureTime = null;
+            totalSeats = 0;
+            trainName = "";
+            route = "";
+            return "manager_page.xhtml?faces-redirect=true";
+        }
+        return "";
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setTotalSeatsValues(List<Integer> totalSeatsValues) {
+        this.totalSeatsValues = totalSeatsValues;
     }
 }

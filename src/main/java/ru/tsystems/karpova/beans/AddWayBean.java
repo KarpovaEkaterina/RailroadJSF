@@ -1,12 +1,25 @@
 package ru.tsystems.karpova.beans;
 
+import ru.tsystems.karpova.service.RouteService;
+
+import javax.ejb.EJB;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 import java.util.Date;
 
-public class AddWayBean {
+@SessionScoped
+@ManagedBean(name = "addWayBean")
+public class AddWayBean implements Serializable {
+
+    @EJB
+    private RouteService routeService;
+
     private String stationA;
     private String stationB;
     private Double price;
     private Date time;
+    private String addWaysResult = "";
 
     public String getStationA() {
         return stationA;
@@ -38,5 +51,13 @@ public class AddWayBean {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public String getAddWaysResult() {
+        return addWaysResult;
+    }
+
+    public void setAddWaysResult(String addWaysResult) {
+        this.addWaysResult = addWaysResult;
     }
 }

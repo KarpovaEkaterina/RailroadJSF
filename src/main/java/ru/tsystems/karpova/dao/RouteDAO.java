@@ -3,12 +3,14 @@ package ru.tsystems.karpova.dao;
 import org.apache.log4j.Logger;
 import ru.tsystems.karpova.entities.Route;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
 import java.util.List;
 
-public class RouteDAO extends BasicDAO{
+@Stateless
+public class RouteDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(RouteDAO.class);
 

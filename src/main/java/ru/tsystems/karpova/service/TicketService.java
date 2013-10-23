@@ -1,61 +1,70 @@
 package ru.tsystems.karpova.service;
 
 import org.apache.log4j.Logger;
-import ru.tsystems.karpova.beans.BuyTicketBean;
-import ru.tsystems.karpova.entities.*;
 import ru.tsystems.karpova.dao.PassengerDAO;
 import ru.tsystems.karpova.dao.StationDAO;
 import ru.tsystems.karpova.dao.TicketDAO;
 import ru.tsystems.karpova.dao.TrainDAO;
+import ru.tsystems.karpova.entities.Passenger;
+import ru.tsystems.karpova.entities.Station;
+import ru.tsystems.karpova.entities.Ticket;
+import ru.tsystems.karpova.entities.Train;
 
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+@Stateless
 public class TicketService {
 
     private static Logger log = Logger.getLogger(TicketService.class);
 
+    @EJB
     private TicketDAO ticketDAO;
+    @EJB
     private PassengerDAO passengerDAO;
+    @EJB
     private TrainDAO trainDAO;
+    @EJB
     private StationDAO stationDAO;
-    private String message = "";
-    private BuyTicketBean buyTicBean;
-    private User user;
-    private List<String> listAllTrains = new ArrayList<String>();
-    private List<String> listAllStationsByTrain = new ArrayList<String>();
 
-    public TicketService() {
-        ticketDAO = new TicketDAO();
-        passengerDAO = new PassengerDAO();
-        trainDAO = new TrainDAO();
-        stationDAO = new StationDAO();
-    }
-
-    public String buyTicket() throws IOException {
+    public String buyTicket(String trainName, String stationFromName, String stationToName, String firstname,
+                            String lastname, Date birthday) throws IOException {
+        String message = "";
         log.debug("Start method \"saveTicket\"");
-        if ("".equals(buyTicBean.getTrain()) || "".equals(buyTicBean.getStationFrom()) || "".equals(buyTicBean.getStationTo())
-                || buyTicBean.getBirthday() == null || "".equals(buyTicBean.getFirstname()) || "".equals(buyTicBean.getLastname())) {
+        if ("".equals(trainName) || "".equals(stationFromName) || "".equals(stationToName)
+                || birthday == null || "".equals(firstname) || "".equals(lastname)) {
             log.debug("Send BuyTicketRespondInfo to client with SERVER_ERROR_STATUS");
             message = "Все поля должны быть заполнены!";
             return message;
         }
-        Train train = trainDAO.loadTrain(buyTicBean.getTrain());
+        if (stationFromName.equals(stationToName)) {
+            message = "Ошибка в выборе станций";
+            return message;
+        }
+        Date currentTime = new Date();
+        if (currentTime.before(birthday)) {
+            message = "Человек еще не родился";
+            return message;
+        }
+        Train train = trainDAO.loadTrain(trainName);
         if (train == null) {
             log.debug("Send BuyTicketRespondInfo to client with WRONG_TRAIN_NAME_STATUS");
             message = "Server error";
             return message;
         }
-        Station stationFrom = stationDAO.loadStationByName(buyTicBean.getStationFrom());
+        Station stationFrom = stationDAO.loadStationByName(stationFromName);
         if (stationFrom == null) {
             log.debug("Send BuyTicketRespondInfo to client with WRONG_STATION_FROM_NAME_STATUS");
             message = "Server error";
             return message;
         }
-        Station stationTo = stationDAO.loadStationByName(buyTicBean.getStationTo());
+        Station stationTo = stationDAO.loadStationByName(stationToName);
         if (stationTo == null) {
             log.debug("Send BuyTicketRespondInfo to client with WRONG_STATION_TO_NAME_STATUS");
             message = "Server error";
@@ -77,18 +86,18 @@ public class TicketService {
             message = "Продажа билетов уже завершена";
             return message;
         }
-        Passenger passenger = passengerDAO.loadPassenger(buyTicBean.getFirstname(),
-                buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
+        Passenger passenger = passengerDAO.loadPassenger(firstname,
+                lastname, new Timestamp(birthday.getTime()));
         if (passenger == null) {
-            passenger = new Passenger(buyTicBean.getFirstname(),
-                    buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
+            passenger = new Passenger(firstname,
+                    lastname, new Timestamp(birthday.getTime()));
             if (!passengerDAO.savePassenger(passenger)) {
                 log.debug("Send BuyTicketRespondInfo to client with SERVER_ERROR_STATUS");
                 message = "Server error";
                 return message;
             }
-            passenger = passengerDAO.loadPassenger(buyTicBean.getFirstname(),
-                    buyTicBean.getLastname(), new Timestamp(buyTicBean.getBirthday().getTime()));
+            passenger = passengerDAO.loadPassenger(firstname,
+                    lastname, new Timestamp(birthday.getTime()));
         }
         synchronized (TrainDAO.class) {
             HashMap<Integer, Integer[]> passengerByStation = trainDAO.countOfPassengerOnEveryStation(train);
@@ -174,32 +183,8 @@ public class TicketService {
         return train.getTotalSeats() - maxOccupied;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setBuyTicBean(BuyTicketBean buyTicBean) {
-        this.buyTicBean = buyTicBean;
-    }
-
-    public BuyTicketBean getBuyTicBean() {
-        return buyTicBean;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
     public List<String> getListAllTrains() {
-        listAllTrains.clear();
+        List<String> listAllTrains = new ArrayList<String>();
         List<Train> listTrains = trainDAO.getAllTrains();
         for (Train train : listTrains) {
             listAllTrains.add(train.getName());
@@ -207,27 +192,14 @@ public class TicketService {
         return listAllTrains;
     }
 
-    public void setListAllTrains(List<String> listAllTrains) {
-        this.listAllTrains = listAllTrains;
-    }
-
-    public List<String> getListAllStationsByTrain() {
-        return listAllStationsByTrain;
-    }
-
-    public void updateStationsByTrain() {
-        listAllStationsByTrain.clear();
-        if (buyTicBean.getTrain() != null && !buyTicBean.getTrain().equals("")) {
-            List<Object[]> allStationsByTrainName = trainDAO.getAllStationsByTrainName(buyTicBean.getTrain());
+    public List<String> updateStationsByTrain(String trainName) {
+        List<String> listAllStationsByTrain = new ArrayList<String>();
+        if (trainName != null && !"".equals(trainName)) {
+            List<Object[]> allStationsByTrainName = trainDAO.getAllStationsByTrainName(trainName);
             for (Object[] station : allStationsByTrainName) {
                 listAllStationsByTrain.add((String) station[1]);
             }
-        } else {
-            listAllStationsByTrain = new ArrayList<String>();
         }
-    }
-
-    public void setListAllStationsByTrain(List<String> listAllStationsByTrain) {
-        this.listAllStationsByTrain = listAllStationsByTrain;
+        return listAllStationsByTrain;
     }
 }

@@ -5,6 +5,7 @@ import ru.tsystems.karpova.entities.Passenger;
 import ru.tsystems.karpova.entities.Station;
 import ru.tsystems.karpova.entities.Train;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.RollbackException;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+@Stateless
 public class TrainDAO extends BasicDAO {
 
     private static Logger log = Logger.getLogger(TrainDAO.class);
