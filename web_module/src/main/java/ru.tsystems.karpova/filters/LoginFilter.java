@@ -1,13 +1,6 @@
 package ru.tsystems.karpova.filters;
 
-import ru.tsystems.karpova.entities.User;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-public class LoginFilter implements Filter {
+public class LoginFilter {}/*implements Filter {
     public void destroy() {
     }
 
@@ -26,4 +19,4 @@ public class LoginFilter implements Filter {
     public void init(FilterConfig config) throws ServletException {
     }
 
-}
+}  */

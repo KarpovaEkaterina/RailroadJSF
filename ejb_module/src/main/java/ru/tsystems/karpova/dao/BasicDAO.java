@@ -12,7 +12,7 @@ public class BasicDAO {
     protected static EntityManagerFactory emf = Persistence
             .createEntityManagerFactory("myapp");
 
-    @PersistenceContext()
+    @PersistenceContext
     protected EntityManager em;
 
     public BasicDAO() {

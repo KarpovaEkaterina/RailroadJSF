@@ -1,4 +1,4 @@
-package main.java.ru.tsystems.karpova.beans;
+package ru.tsystems.karpova.beans;
 
 import java.io.IOException;
 import java.lang.Object;

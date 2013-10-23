@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ear_module</artifactId>
+    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
@@ -25,6 +26,7 @@
             <type>war</type>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>

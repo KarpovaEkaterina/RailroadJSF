@@ -1,4 +1,4 @@
-package main.java.ru.tsystems.karpova.beans;
+package ru.tsystems.karpova.beans;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
