@@ -9,10 +9,9 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class BasicDAO {
 
-    protected static EntityManagerFactory emf = Persistence
+    protected static final EntityManagerFactory emf = Persistence
             .createEntityManagerFactory("myapp");
 
-    @PersistenceContext
     protected EntityManager em;
 
     public BasicDAO() {
