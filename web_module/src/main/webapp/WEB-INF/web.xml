@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
-    <!--<filter>
+    <filter>
         <filter-name>PassengerFilter</filter-name>
         <filter-class>ru.tsystems.karpova.filters.UserFilter</filter-class>
         <init-param>
@@ -31,19 +31,17 @@
 
     <filter-mapping>
         <filter-name>PassengerFilter</filter-name>
-        <url-pattern>/passenger/*</url-pattern>
-        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/passenger_page.xhtml</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>ManagerFilter</filter-name>
-        <url-pattern>/manager/*</url-pattern>
-        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/manager_page.xhtml</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
-        <url-pattern>/admin/*</url-pattern>
-        <servlet-name>Faces Servlet</servlet-name>
-    </filter-mapping>-->
+        <url-pattern>/admin_page.xhtml</url-pattern>
+        <url-pattern>/result_admin_page.xhtml</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -54,6 +52,7 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+
     <welcome-file-list>
         <welcome-file>authorization.xhtml</welcome-file>
     </welcome-file-list>

@@ -5,7 +5,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebFilter(servletNames = "Faces Servlet", urlPatterns = "*.xhtml")
+@WebFilter(servletNames = "Faces Servlet")
 public class NoCacheFilter implements Filter {
 
     @Override

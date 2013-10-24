@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class UserFilter {}/* implements Filter {
+public class UserFilter implements Filter {
     private int accessLevel;
 
     public void destroy() {
@@ -31,4 +31,4 @@ public class UserFilter {}/* implements Filter {
         }
     }
 
-}*/
+}
