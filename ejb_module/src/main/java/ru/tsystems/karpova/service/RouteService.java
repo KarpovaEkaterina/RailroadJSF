@@ -66,10 +66,15 @@ public class RouteService {
             return message;
         }
         if ("".equals(routeName)) {
-            message = "Введите название ";
+            message = "Введите название";
             return message;
         }
-        Route route = new Route();
+        Route route = routeDAO.loadRoute(routeName);
+        if (route != null) {
+            message = "Маршрут с таким названием уже существует";
+            return message;
+        }
+        route = new Route();
         route.setName(routeName);
         if (!routeDAO.saveRoute(route)) {
             log.debug("Send AddRouteRespondInfo to client with SERVER_ERROR_STATUS");

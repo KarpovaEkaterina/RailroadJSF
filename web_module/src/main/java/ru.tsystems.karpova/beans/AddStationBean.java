@@ -4,11 +4,11 @@ import ru.tsystems.karpova.service.StationService;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.IOException;
 import java.io.Serializable;
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "addStationBean")
 public class AddStationBean implements Serializable {
 

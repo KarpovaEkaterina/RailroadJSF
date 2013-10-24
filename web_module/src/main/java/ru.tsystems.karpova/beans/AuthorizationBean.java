@@ -5,11 +5,11 @@ import ru.tsystems.karpova.service.AuthorizationService;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "authorizationBean")
 public class AuthorizationBean implements Serializable {
 

@@ -4,13 +4,13 @@ import ru.tsystems.karpova.service.TicketService;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "buyTicketBean")
 public class BuyTicketBean {
 

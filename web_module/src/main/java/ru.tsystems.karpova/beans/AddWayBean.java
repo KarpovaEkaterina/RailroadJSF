@@ -4,11 +4,11 @@ import ru.tsystems.karpova.service.RouteService;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.Date;
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "addWayBean")
 public class AddWayBean implements Serializable {
 

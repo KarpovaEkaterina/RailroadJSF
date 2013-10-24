@@ -17,7 +17,6 @@
             </p:selectOneMenu>
             <h:outputText value="Количество мест"/>
             <p:selectOneMenu value="#{addTrainBean.totalSeats}" effect="fade" style="width: 200px">
-                <f:selectItem/>
                 <f:selectItems value="#{addTrainBean.totalSeatsValues}"/>
             </p:selectOneMenu>
             <h:outputText value="Дата отправления"/><p:calendar value="#{addTrainBean.departureTime}"

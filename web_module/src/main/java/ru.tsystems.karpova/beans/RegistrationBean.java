@@ -5,10 +5,10 @@ import ru.tsystems.karpova.service.RegistrationService;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 
-@SessionScoped
+@ViewScoped
 @ManagedBean(name = "registrationBean")
 public class RegistrationBean implements Serializable {
 
