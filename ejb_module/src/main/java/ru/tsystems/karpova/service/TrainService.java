@@ -19,7 +19,7 @@ import java.util.List;
 @Stateless
 public class TrainService {
 
-    private static Logger log = Logger.getLogger(TrainService.class);
+    private static final Logger log = Logger.getLogger(TrainService.class);
 
     @EJB
     private TrainDAO trainDAO;
@@ -76,7 +76,13 @@ public class TrainService {
             message = "Время отправления уже прошло";
             return message;
         }
-        Train train = new Train(trainName, totalSeats,
+        Train train = trainDAO.loadTrain(trainName);
+        if (train != null) {
+            log.debug("Send AddTrainRespondInfo to client with WRONG_TRAIN_NAME");
+            message = "Поезд с таким названием уже существует";
+            return message;
+        }
+        train = new Train(trainName, totalSeats,
                 new Timestamp(departureTime.getTime()), route);
         if (!trainDAO.saveTrain(train)) {
             log.debug("Send AddTrainRespondInfo to client with SERVER_ERROR_STATUS");

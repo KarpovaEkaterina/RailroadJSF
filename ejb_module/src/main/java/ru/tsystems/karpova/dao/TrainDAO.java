@@ -6,9 +6,6 @@ import ru.tsystems.karpova.entities.Station;
 import ru.tsystems.karpova.entities.Train;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.RollbackException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,7 +18,9 @@ public class TrainDAO extends BasicDAO {
 
     public Train loadTrain(String trainName) {
         log.debug("Start loadTrain select");
-        List results = em.createQuery("from Train where name=?").setParameter(1, trainName).getResultList();
+        List results = em.createQuery("select t from Train t where t.name = :name ")
+                .setParameter("name", trainName)
+                .getResultList();
         return results == null || results.isEmpty() ? null : (Train) results.get(0);
     }
 
@@ -64,39 +63,39 @@ public class TrainDAO extends BasicDAO {
 
     }
 
-    public List<Object[]> findTrainByStationFrom(String station) {
+    public List<Object[]> findTrainByStationTo(String station) {
         log.debug("Start findTrainByStation select");
-        List results = em.createQuery("select t.name,\n" +
-                "FROM_UNIXTIME(UNIX_TIMESTAMP(t.departure) + SUM(case when wayTime.id = wayA.id then 0 else UNIX_TIMESTAMP(wayTime.time) end)) as startTime\n" +
-                "from Train t \n" +
-                "join t.routeByIdRoute r\n" +
-                "join r.schedulesById scheduleA\n" +
-                "join scheduleA.wayByIdWay wayA\n" +
-                "join wayA.stationByIdStation1 stationA\n" +
-                "join r.schedulesById scheduleTime\n" +
-                "join scheduleTime.wayByIdWay wayTime\n" +
-                "where stationA.name = ?\n" +
-                "and scheduleTime.seqNumber <= scheduleA.seqNumber\n" +
-                "group by t.name\n")
+        List results = em.createNativeQuery("select train.name, \n" +
+                "FROM_UNIXTIME(UNIX_TIMESTAMP(train.departure) + SUM(UNIX_TIMESTAMP(wayTime.time))) as startTime \n" +
+                "from train \n" +
+                "join route on train.id_route = route.id \n" +
+                "join schedule as scheduleA on route.id = scheduleA.id_route \n" +
+                "join way as wayA on scheduleA.id_way = wayA.id \n" +
+                "join station as stationA on wayA.id_station2 = stationA.id \n" +
+                "join schedule as scheduleTime on route.id = scheduleTime.id_route \n" +
+                "join  way as wayTime on scheduleTime.id_way = wayTime.id \n" +
+                "where stationA.name = ? \n" +
+                "and scheduleTime.seq_number <= scheduleA.seq_number \n" +
+                "group by train.name")
                 .setParameter(1, station)
                 .getResultList();
         return results;
     }
 
-    public List<Object[]> findTrainByStationTo(String station) {
+    public List<Object[]> findTrainByStationFrom(String station) {
         log.debug("Start findTrainByStation select");
-        List results = em.createQuery("select t.name,\n" +
-                "FROM_UNIXTIME(UNIX_TIMESTAMP(t.departure) + SUM(UNIX_TIMESTAMP(wayTime.time))) as startTime\n" +
-                "from Train t \n" +
-                "join t.routeByIdRoute r\n" +
-                "join r.schedulesById scheduleA\n" +
-                "join scheduleA.wayByIdWay wayA\n" +
-                "join wayA.stationByIdStation2 stationA\n" +
-                "join r.schedulesById scheduleTime\n" +
-                "join scheduleTime.wayByIdWay wayTime\n" +
-                "where stationA.name = ?\n" +
-                "and scheduleTime.seqNumber <= scheduleA.seqNumber\n" +
-                "group by t.name\n")
+        List results = em.createNativeQuery("select train.name, \n" +
+                "FROM_UNIXTIME(UNIX_TIMESTAMP(train.departure) + SUM(case when wayTime.id = wayA.id then 0 else UNIX_TIMESTAMP(wayTime.time) end)) as startTime \n" +
+                "from train \n" +
+                "join route on train.id_route = route.id \n" +
+                "join schedule as scheduleA on route.id = scheduleA.id_route \n" +
+                "join way as wayA on scheduleA.id_way = wayA.id \n" +
+                "join station as stationA on wayA.id_station1 = stationA.id \n" +
+                "join schedule as scheduleTime on route.id = scheduleTime.id_route \n" +
+                "join  way as wayTime on scheduleTime.id_way = wayTime.id \n" +
+                "where stationA.name = ? \n" +
+                "and scheduleTime.seq_number <= scheduleA.seq_number \n" +
+                "group by train.name")
                 .setParameter(1, station)
                 .getResultList();
         return results;
@@ -104,19 +103,19 @@ public class TrainDAO extends BasicDAO {
 
     public boolean checkDepartureTime(Train train, Station stationFrom) {
         log.debug("Start checkDepartureTime select");
-        List results = em.createQuery("select current_timestamp, \n" +
-                "FROM_UNIXTIME(UNIX_TIMESTAMP(t.departure) + SUM(case when wayTime.id = wayA.id then 0 else UNIX_TIMESTAMP(wayTime.time) end)) as departureTime \n" +
-                "from Train t \n" +
-                "join t.routeByIdRoute r\n" +
-                "join r.schedulesById scheduleA\n" +
-                "join scheduleA.wayByIdWay wayA\n" +
-                "join wayA.stationByIdStation1 stationA\n" +
-                "join r.schedulesById scheduleTime\n" +
-                "join scheduleTime.wayByIdWay wayTime\n" +
-                "where stationA.name = ?\n" +
-                "and t.name = ?\n" +
-                "and scheduleTime.seqNumber <= scheduleA.seqNumber\n" +
-                "group by t.name\n")
+        List results = em.createNativeQuery("select current_timestamp, \n" +
+                "FROM_UNIXTIME(UNIX_TIMESTAMP(train.departure) + SUM(case when wayTime.id = wayA.id then 0 else UNIX_TIMESTAMP(wayTime.time) end)) as departureTime \n" +
+                "from train \n" +
+                "join route on train.id_route = route.id \n" +
+                "join schedule as scheduleA on route.id = scheduleA.id_route \n" +
+                "join way as wayA on scheduleA.id_way = wayA.id \n" +
+                "join station as stationA on wayA.id_station1 = stationA.id \n" +
+                "join schedule as scheduleTime on route.id = scheduleTime.id_route \n" +
+                "join way as wayTime on scheduleTime.id_way = wayTime.id \n" +
+                "where stationA.name = ? \n" +
+                "and train.name = ? \n" +
+                "and scheduleTime.seq_number <= scheduleA.seq_number \n" +
+                "group by train.name")
                 .setParameter(1, stationFrom.getName())
                 .setParameter(2, train.getName())
                 .getResultList();
@@ -135,69 +134,67 @@ public class TrainDAO extends BasicDAO {
 
     public boolean isAlreadyExistPassengerOnTrain(Train train, Passenger passenger) {
         log.debug("Start isAlreadyExistPassengerOnTrain select");
-        List results = em.createQuery("select count(*)\n" +
-                "from Train train \n" +
-                "join train.ticketsById ticket\n" +
-                "join ticket.passengerByIdPassenger passenger\n" +
-                "where train.name = ?\n" +
-                "and passenger.firstname = ?\n" +
-                "and passenger.lastname = ?\n" +
-                "and passenger.birthday = ?")
-                .setParameter(1, train.getName())
-                .setParameter(2, passenger.getFirstname())
-                .setParameter(3, passenger.getLastname())
-                .setParameter(4, passenger.getBirthday())
+        List results = em.createQuery("select count(train) " +
+                "from Train train " +
+                "join train.ticketsById ticket " +
+                "join ticket.passengerByIdPassenger passenger " +
+                "where train.name = :name " +
+                "and passenger.firstname = :fName " +
+                "and passenger.lastname = :lName " +
+                "and passenger.birthday = :bDay")
+                .setParameter("name", train.getName())
+                .setParameter("fName", passenger.getFirstname())
+                .setParameter("lName", passenger.getLastname())
+                .setParameter("bDay", passenger.getBirthday())
                 .getResultList();
         return (Long) results.get(0) != 0;
     }
 
     public HashMap<Integer, Integer[]> countOfPassengerOnEveryStation(Train train) {
         log.debug("Start countOfPassengerOnEveryStation select");
-        List stationFrom = em.createQuery("select station.id, count(ticket.id), 0, schedule.seqNumber - 1 \n" +
-                "from Train train \n" +
-                "left join train.ticketsById ticket\n" +
-                "inner join ticket.stationByStationFrom station\n" +
-                "inner join train.routeByIdRoute route\n" +
-                "inner join route.schedulesById schedule\n" +
-                "inner join schedule.wayByIdWay way\n" +
-                "inner join way.stationByIdStation1 stationFrom\n" +
-                "where train.name = ?\n" +
-                "and stationFrom.id = station.id\n" +
+        List stationFrom = em.createQuery("select station.id, 0, count(ticket.id), schedule.seqNumber " +
+                "from Train train " +
+                "left join train.ticketsById ticket " +
+                "inner join ticket.stationByStationFrom station " +
+                "inner join train.routeByIdRoute route " +
+                "inner join route.schedulesById schedule " +
+                "inner join schedule.wayByIdWay way " +
+                "inner join way.stationByIdStation1 stationFrom " +
+                "where train.name = :name " +
+                "and stationFrom.id = station.id " +
                 " group by station.id")
-                .setParameter(1, train.getName())
+                .setParameter("name", train.getName())
                 .getResultList();
-        List stationTo = em.createQuery("select station.id, 0, count(ticket.id), schedule.seqNumber \n" +
-                "from Train train \n" +
-                "left join train.ticketsById ticket\n" +
-                "inner join ticket.stationByStationTo station\n" +
-                "inner join train.routeByIdRoute route\n" +
-                "inner join route.schedulesById schedule\n" +
-                "inner join schedule.wayByIdWay way\n" +
-                "inner join way.stationByIdStation2 stationTo\n" +
-                "where train.name = ?\n" +
-                "and stationTo.id = station.id\n" +
+        List stationTo = em.createQuery("select station.id, 0, count(ticket.id), schedule.seqNumber " +
+                "from Train train " +
+                "left join train.ticketsById ticket " +
+                "inner join ticket.stationByStationTo station " +
+                "inner join train.routeByIdRoute route " +
+                "inner join route.schedulesById schedule " +
+                "inner join schedule.wayByIdWay way " +
+                "inner join way.stationByIdStation2 stationTo " +
+                "where train.name = :name " +
+                "and stationTo.id = station.id " +
                 " group by station.id")
-                .setParameter(1, train.getName())
+                .setParameter("name", train.getName())
                 .getResultList();
         HashMap<Integer, Integer[]> result = new HashMap<Integer, Integer[]>();
         for (Object[] obj : (List<Object[]>) stationFrom) {
             if (result.containsKey(obj[0])) {
                 Integer[] a = result.get(obj[0]);
-                a[0] += ((Long) obj[1]).intValue();
-                a[1] += (Integer) obj[2];
-                result.put((Integer) obj[0], new Integer[]{a[1], a[2], (Integer) obj[3]});
+                a[0] += ((Long) obj[2]).intValue();
+                result.put((Integer) obj[0], a);
             } else {
-                result.put((Integer) obj[0], new Integer[]{((Long) obj[1]).intValue(), (Integer) obj[2], (Integer) obj[3]});
+                result.put((Integer) obj[0], new Integer[]{((Long) obj[2]).intValue(), ((Long) obj[1]).intValue(), ((Integer) obj[3])-1});
             }
         }
         for (Object[] obj : (List<Object[]>) stationTo) {
             if (result.containsKey(obj[0])) {
                 Integer[] a = result.get(obj[0]);
-                a[0] += (Integer) obj[1];
                 a[1] += ((Long) obj[2]).intValue();
-                result.put((Integer) obj[0], new Integer[]{a[1], a[2], (Integer) obj[3]});
+                result.put((Integer) obj[0], a);
             } else {
-                result.put((Integer) obj[0], new Integer[]{(Integer) obj[1], ((Long) obj[2]).intValue(), (Integer) obj[3]});
+                result.put((Integer) obj[0], new Integer[]{((Long) obj[1]).intValue(), ((Long) obj[2]).intValue(), (Integer) obj[3]});
             }
         }
         return result;
@@ -229,27 +226,14 @@ public class TrainDAO extends BasicDAO {
 
     public boolean saveTrain(Train train) {
         log.debug("Start saveTrain");
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction trx = em.getTransaction();
-        try {
-            trx.begin();
-
-            em.persist(train);
-
-            trx.commit();
-            log.debug("Saving train");
-            return true;
-        } catch (RollbackException e) {
-            log.error("Can't save train", e);
-            trx.rollback();
-            return false;
-        }
-
+        em.persist(train);
+        log.debug("Saving train");
+        return true;
     }
 
     public List<Train> getAllTrains() {
         log.debug("Start getAllTrains select");
-        List<Train> results = em.createQuery("from Train ").getResultList();
+        List<Train> results = em.createQuery("select t from Train t").getResultList();
         return results;
 
     }

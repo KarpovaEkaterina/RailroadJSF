@@ -6,11 +6,13 @@ import ru.tsystems.karpova.entities.User;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 
 @Stateless
 public class RegistrationService {
 
-    private static Logger log = Logger.getLogger(RegistrationService.class);
+    private static final Logger log = Logger.getLogger(RegistrationService.class);
 
     @EJB
     private UserDAO userDAO;

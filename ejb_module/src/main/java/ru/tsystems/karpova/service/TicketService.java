@@ -22,7 +22,7 @@ import java.util.List;
 @Stateless
 public class TicketService {
 
-    private static Logger log = Logger.getLogger(TicketService.class);
+    private static final Logger log = Logger.getLogger(TicketService.class);
 
     @EJB
     private TicketDAO ticketDAO;

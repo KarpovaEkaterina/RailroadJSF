@@ -13,7 +13,7 @@ import java.util.List;
 @Stateless
 public class StationService {
 
-    private static Logger log = Logger.getLogger(StationService.class);
+    private static final Logger log = Logger.getLogger(StationService.class);
 
     @EJB
     private StationDAO stationDAO;
