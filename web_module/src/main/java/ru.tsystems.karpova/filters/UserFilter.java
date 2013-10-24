@@ -1,14 +1,20 @@
 package ru.tsystems.karpova.filters;
 
-public class UserFilter {
-} /*implements Filter {
+import ru.tsystems.karpova.beans.CurrentUserBean;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class UserFilter {}/* implements Filter {
     private int accessLevel;
 
     public void destroy() {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
-        User loginBean = (User) ((HttpServletRequest) request).getSession().getAttribute("currentUser");
+        CurrentUserBean loginBean = (CurrentUserBean) ((HttpServletRequest) request).getSession().getAttribute("currentUserBean");
         if (loginBean == null || loginBean.getAccessLevel() != accessLevel) {
             ((HttpServletResponse) response).sendError(HttpServletResponse.SC_FORBIDDEN);
         } else {

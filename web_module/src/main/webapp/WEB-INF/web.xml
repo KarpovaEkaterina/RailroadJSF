@@ -5,11 +5,7 @@
 		  http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
     <!--<filter>
-        <filter-name>UnknownUserFilter</filter-name>
-        <filter-class>ru.tsystems.karpova.filters.LoginFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>UserFilter</filter-name>
+        <filter-name>PassengerFilter</filter-name>
         <filter-class>ru.tsystems.karpova.filters.UserFilter</filter-class>
         <init-param>
             <param-name>accessLevel</param-name>
@@ -34,22 +30,18 @@
     </filter>
 
     <filter-mapping>
-        <filter-name>UnknownUserFilter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>UserFilter</filter-name>
-        <url-pattern>/passenger_page.xhtml</url-pattern>
+        <filter-name>PassengerFilter</filter-name>
+        <url-pattern>/passenger/*</url-pattern>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>ManagerFilter</filter-name>
-        <url-pattern>/manager_page.xhtml</url-pattern>
+        <url-pattern>/manager/*</url-pattern>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
     <filter-mapping>
         <filter-name>AdminFilter</filter-name>
-        <url-pattern>/admin_page.xhtml</url-pattern>
+        <url-pattern>/admin/*</url-pattern>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>-->
 
@@ -58,14 +50,6 @@
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>*.faces</url-pattern>
-    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
